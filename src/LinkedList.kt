@@ -1,5 +1,5 @@
-class Node<T>(value: T) {
-    var value: T = value
+class Node<T>(var value: T) {
+//    var value: T = value
     var next: Node<T>? = null
     var previous: Node<T>? = null
 }
@@ -141,6 +141,15 @@ class LinkedList<T> {
         return null
     }
 
+
+    fun insertBeforeIndex(value: T, index: Int): T? {
+        return insertAtIndex(value, index, NodeInsertionMode.INSERT_BEFORE_NODE)
+    }
+
+    fun insertAfterIndex(value: T, index: Int): T? {
+        return insertAtIndex(value, index, NodeInsertionMode.INSERT_AFTER_NODE)
+    }
+
     private fun insertAtIndex(value: T, index: Int, NodeInsertMode: NodeInsertionMode): T? {
         var node = head
         var prevNode = head
@@ -163,14 +172,6 @@ class LinkedList<T> {
         }
 
         return null
-    }
-
-    fun insertBeforeIndex(value: T, index: Int): T? {
-    return insertAtIndex(value, index, NodeInsertionMode.INSERT_BEFORE_NODE)
-    }
-
-    fun insertAfterIndex(value: T, index: Int): T? {
-        return insertAtIndex(value, index, NodeInsertionMode.INSERT_AFTER_NODE)
     }
 
     private fun insertBeforeThisNode(value: T, thisNode: Node<T>?, prevNode: Node<T>?) {
