@@ -3,32 +3,34 @@ class Node<T>(value: T){
     var next: Node<T>? = null
     var previous:Node<T>? = null
 }
+
+
 class LinkedList<T> {
     private var head:Node<T>? = null
     var isEmpty:Boolean = head == null
     fun first():Node<T>? = head
     fun last(): Node<T>? {
         var node = head
-        if (node != null){
+        return if (node != null) {
             while (node?.next != null) {
-                node = node?.next
+                node = node.next
             }
-            return node
+            node
         } else {
-            return null
+            null
         }
     }
     fun count():Int {
         var node = head
-        if (node != null){
+        return if (node != null){
             var counter = 1
             while (node?.next != null){
                 node = node?.next
                 counter += 1
             }
-            return counter
+            counter
         } else {
-            return 0
+            0
         }
     }
     fun nodeAtIndex(index: Int) : Node<T>? {
@@ -44,8 +46,8 @@ class LinkedList<T> {
         return null
     }
     fun append(value: T) {
-        var newNode = Node(value)
-        var lastNode = this.last()
+        val newNode = Node(value)
+        val lastNode = this.last()
         if (lastNode != null) {
             newNode.previous = lastNode
             lastNode.next = newNode
@@ -71,18 +73,18 @@ class LinkedList<T> {
     }
     fun removeLast() : T? {
         val last = this.last()
-        if (last != null) {
-            return removeNode(last)
+        return if (last != null) {
+            removeNode(last)
         } else {
-            return null
+            null
         }
     }
     fun removeAtIndex(index: Int):T? {
         val node = nodeAtIndex(index)
-        if (node != null) {
-            return removeNode(node)
+        return if (node != null) {
+            removeNode(node)
         } else {
-            return null
+            null
         }
     }
     override fun toString(): String {
@@ -95,4 +97,20 @@ class LinkedList<T> {
         }
         return "$s]"
     }
+
+    fun insertAfterMatch(match: T, value: T): T? {
+        var node = head
+        while (node != null) {
+            if (node.value == match) {
+                val tmp = node.next
+                node.next = Node(value)
+                node.next?.next = tmp
+                return node.value
+            }
+            node = node.next
+        }
+
+        return null
+    }
+    // Implement insertAfterIndex
 }

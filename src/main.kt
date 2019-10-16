@@ -1,5 +1,6 @@
 fun main(args: Array<String>) {
-    var bev = readLine() // wait for keybd input
+    //var bev = readLine() // wait for keybd input
+    var bev = "Chris Athanas"
     var swords : Int? = null
     bev?.let {
         bev = it.capitalize()
@@ -46,9 +47,21 @@ fun main(args: Array<String>) {
     println("last item: ${ll.last()?.value}")
     println("second item: ${ll.first()?.next?.value}")
     println("penultimate item: ${ll.last()?.previous?.value}")
-    println("\n4th item: ${ll.nodeAtIndex(3)?.value}")
-    println("\nthe list has ${ll.count()} items")
+    println("4th item: ${ll.nodeAtIndex(3)?.value}")
 
+    println("\nthe list has ${ll.count()} items: $ll")
+
+    ll.removeAtIndex(2)
+    println("After remove 3rd item: ${ll.nodeAtIndex(2)?.value} items: $ll")
+    println("the list has ${ll.count()} items: $ll")
+    ll.nodeAtIndex(0)?.let { ll.removeNode(it) }
+    println("After removing node 0, the list has ${ll.count()} items: $ll")
+
+    ll.insertAfterMatch("Tim", "This is after Tim")
+    println("After insert after Tim: $ll")
+
+    ll.insertAfterMatch("Peter", "This is after Peter")
+    println("After insert after Peter: $ll")
 }
 
 class Aaa(var superClass: Int)
