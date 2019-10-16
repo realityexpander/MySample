@@ -1,10 +1,14 @@
 fun main(args: Array<String>) {
     //var bev = readLine() // wait for keybd input
-    var bev = "Chris Athanas"
-    var swords : Int? = null
+    var bev = "chris athanas"
+    var swords : Int? = 2
     bev.let {
-        bev = it.capitalize()
+        bev = it.split(" ")
+                .asSequence()
+                .map{ s -> s.capitalize()}
+                .joinToString(" ")
     } //?: println("i cant do that without crashing")
+
 
     try {
         swords ?: throw UnskilledSwordJUgglerException()
@@ -50,22 +54,28 @@ fun main(args: Array<String>) {
     println("\nthe list has ${ll.count()} items: $ll")
 
     ll.removeAtIndex(2)
-    println("After remove 3rd item: ${ll.nodeAtIndex(2)?.value} items: $ll")
+    println(" 'remove 3rd item': ${ll.nodeAtIndex(2)?.value} items: $ll")
     println("the list has ${ll.count()} items: $ll")
     ll.nodeAtIndex(0)?.let { ll.removeNode(it) }
-    println("After removing node 0, the list has ${ll.count()} items: $ll")
+    println(" 'removing node 0', the list has ${ll.count()} items: $ll")
 
-    ll.insertAfterMatch("Tim", "This is after Tim")
-    println("After insert after Tim: $ll")
+    ll.insertAfterMatch("This is after Tim", "Tim")
+    println("\n 'insert after Tim': $ll")
 
-    ll.insertAfterMatch("Peter", "This is after Peter")
-    println("After insert after Peter: $ll")
+    ll.insertAfterMatch( "This is after Peter", "Peter")
+    println(" 'insert after Peter': $ll")
 
     ll.insertBeforeMatch("Carl", "Before Carl")
-    println("After insert before Carl on Head: $ll")
+    println("\n 'insert before Carl' on Head: $ll")
 
-    ll.insertBeforeMatch("Tim", "Before Tim")
-    println("After insert before Tim on middle of list: $ll")
+    ll.insertBeforeMatch("Tim" , "Before Tim")
+    println(" 'insert before Tim' on middle of list: $ll")
+    
+    ll.insertAfterIndex("inserted after 3rd", 2)
+    println("\n insert after index 2: $ll")
+
+    ll.insertBeforeIndex("inserted before 2nd", 1)
+    println("\n insert before index 1: $ll")
 }
 
 
