@@ -2,9 +2,9 @@ fun main(args: Array<String>) {
     //var bev = readLine() // wait for keybd input
     var bev = "Chris Athanas"
     var swords : Int? = null
-    bev?.let {
+    bev.let {
         bev = it.capitalize()
-    } ?: println("i cant do that without crashing")
+    } //?: println("i cant do that without crashing")
 
     try {
         swords ?: throw UnskilledSwordJUgglerException()
@@ -21,8 +21,6 @@ fun main(args: Array<String>) {
 
     val s = Sword("Abcdefg")
     println(s.name)
-
-    var cls = Aaa(10)
 
     var list = addToList()
     println(list)
@@ -62,9 +60,14 @@ fun main(args: Array<String>) {
 
     ll.insertAfterMatch("Peter", "This is after Peter")
     println("After insert after Peter: $ll")
+
+    ll.insertBeforeMatch("Carl", "Before Carl")
+    println("After insert before Carl on Head: $ll")
+
+    ll.insertBeforeMatch("Tim", "Before Tim")
+    println("After insert before Tim on middle of list: $ll")
 }
 
-class Aaa(var superClass: Int)
 
 class UnskilledSwordJUgglerException() :
         IllegalStateException("Player cannot juggle swords")

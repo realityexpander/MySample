@@ -25,7 +25,7 @@ class LinkedList<T> {
         return if (node != null){
             var counter = 1
             while (node?.next != null){
-                node = node?.next
+                node = node.next
                 counter += 1
             }
             counter
@@ -112,5 +112,27 @@ class LinkedList<T> {
 
         return null
     }
+
+    fun insertBeforeMatch(match: T, value: T): T? {
+        var node = head
+        var prevNode = head
+        while (node != null) {
+            if(node.value == match) {
+                val tmp = node
+                if(node == head) { // special case for head
+                    head = Node(value)
+                    head?.next = tmp
+                } else {
+                    prevNode?.next = Node(value)
+                    prevNode?.next?.next = tmp
+                }
+                return value
+            }
+            prevNode = node
+            node = node.next
+        }
+        return null
+    }
+
     // Implement insertAfterIndex
 }
