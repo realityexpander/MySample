@@ -114,25 +114,37 @@ class LinkedList<T> {
         return "$s]"
     }
 
-    fun insertAfterMatch(value: T, match: T): T? {
-        var node = head
-        while (node != null) {
-            if (node.value == match) {
+    fun insertAfterPredicateCheck(value: T, predicate: (Node<T>?, T)->Boolean) : T? {
+        val node = head
+        while( node != null) {
+            if( predicate(node, value) ) {
                 insertAfterThisNode(value, node)
                 return node.value
             }
-            node = node.next
         }
-
         return null
     }
 
+
     fun insertBeforeMatch(value: T, match: T): T? {
+        return insertMatch(value, match, NodeInsertionMode.INSERT_BEFORE_NODE)
+    }
+
+    fun insertAfterMatch(value: T, match: T) : T? {
+        return insertMatch(value, match, NodeInsertionMode.INSERT_AFTER_NODE )
+    }
+
+    private fun insertMatch(value: T, match: T, nodeInsertMode: NodeInsertionMode): T? {
         var node = head
         var prevNode = head
         while (node != null) {
             if (node.value == match) {
-                insertBeforeThisNode(value, node, prevNode)
+                when(nodeInsertMode) {
+                    NodeInsertionMode.INSERT_BEFORE_NODE ->
+                        insertBeforeThisNode(value, node, prevNode)
+                    NodeInsertionMode.INSERT_AFTER_NODE ->
+                        insertAfterThisNode(value, node)
+                }
                 return value
             }
             prevNode = node
