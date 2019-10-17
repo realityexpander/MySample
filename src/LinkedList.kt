@@ -113,11 +113,11 @@ class LinkedList<T> {
         return "$s]"
     }
 
-    fun insertNodeBeforePredicateCheck(value: T, match: T, predicate: (Node<T>?, T) -> Boolean) : T? {
+    fun insertNodeBeforeUsingPredicateCheck(value: T, match: T, predicate: (Node<T>?, T) -> Boolean) : T? {
         return insertNodeWithPredicateCheck(value, match, NodeInsertionMode.INSERT_BEFORE_NODE, predicate)
     }
 
-    fun insertNodeAfterPredicateCheck(value: T, match: T, predicate: (Node<T>?, T)->Boolean) : T? {
+    fun insertNodeAfterUsingPredicateCheck(value: T, match: T, predicate: (Node<T>?, T) -> Boolean) : T? {
         return insertNodeWithPredicateCheck(value, match, NodeInsertionMode.INSERT_AFTER_NODE, predicate)
     }
 
