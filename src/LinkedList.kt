@@ -78,7 +78,7 @@ class LinkedList<T> {
         next?.previous = prev
         node.previous = null
         node.next = null
-
+        listOf( "a", "b", "c", "d" )
         return node.value
     }
 
@@ -177,7 +177,6 @@ class LinkedList<T> {
         }
         return null
     }
-
 
     fun insertBeforeIndex(value: T, index: Int): T? {
         return insertAtIndex(value, index, NodeInsertionMode.INSERT_BEFORE_NODE)
