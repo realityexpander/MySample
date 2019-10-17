@@ -126,6 +126,15 @@ class LinkedList<T> {
         return null
     }
 
+    fun contains(match: T) : Boolean {
+        var node = head
+        while( node != null) {
+            if(node.value == match)
+                return true
+            node = node.next
+        }
+        return false
+    }
 
     fun insertBeforeMatch(value: T, match: T): T? {
         return insertMatch(value, match, NodeInsertionMode.INSERT_BEFORE_NODE)

@@ -109,12 +109,17 @@ internal class LinkedListTest {
         println(ll)
         assert(ll.count() == startCount +1)
 
-        ll.insertNodeAfterPredicateCheck("Shouldn't Insert element", match = "XXXX", predicate = {
-            node, str -> node?.value == str
-        })
+        ll.insertNodeAfterPredicateCheck("Shouldn't Insert element",
+                "XXXX", pred )
         println(ll)
         assert(ll.count() == startCount + 1)
 
+    }
+
+    @Test
+    fun contains() {
+        assertTrue(ll.contains("Zack"), "Should contain Zack")
+        assertFalse(ll.contains("Missing ELement"), "Should not contain Element")
     }
 
     @org.junit.jupiter.api.Test
