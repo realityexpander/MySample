@@ -24,8 +24,8 @@ internal class LinkedListTest {
 
     @org.junit.jupiter.api.Test
     fun insertAfterMatch() {
-        ll.insertAfterMatch("After Tim", "Tim")
-        assert(ll.toString() == "[John, Carl, Zack, Tim, After Tim, Steve, Peter]")
+        ll.insertAfterMatch("Insert After Tim", "Tim")
+        assert(ll.toString() == "[John, Carl, Zack, Tim, Insert After Tim, Steve, Peter]")
 
         assertTrue(ll.insertAfterMatch("Wont be inserted", "CantFindThisString") == null,
                 "failed to return null")
@@ -33,8 +33,8 @@ internal class LinkedListTest {
 
     @org.junit.jupiter.api.Test
     fun insertBeforeMatch() {
-        ll.insertBeforeMatch("Before Tim", "Tim")
-        assert(ll.toString() == "[John, Carl, Zack, Before Tim, Tim, Steve, Peter]")
+        ll.insertBeforeMatch("Insert Before Tim", "Tim")
+        assert(ll.toString() == "[John, Carl, Zack, Insert Before Tim, Tim, Steve, Peter]")
 
         assertTrue(ll.insertBeforeMatch("Wont be inserted", "CantFindThisString") == null,
                 "failed to return null")
@@ -110,6 +110,25 @@ internal class LinkedListTest {
         assert(ll.count() == startCount +1)
 
         ll.insertNodeAfterPredicateCheck("Shouldn't Insert element",
+                "XXXX", pred )
+        println(ll)
+        assert(ll.count() == startCount + 1)
+
+    }
+
+    @Test
+    fun insertNodeBeforePredicateCheck() {
+        val pred : (Node<String>?, String)-> Boolean = {
+            node, str -> node?.value == str
+        }
+        val startCount = ll.count()
+
+        ll.insertNodeBeforePredicateCheck("New Element", "Zack")
+        { node, str -> node?.value == str }
+        println(ll)
+        assert(ll.count() == startCount +1)
+
+        ll.insertNodeBeforePredicateCheck("Shouldn't Insert element",
                 "XXXX", pred )
         println(ll)
         assert(ll.count() == startCount + 1)

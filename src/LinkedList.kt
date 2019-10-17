@@ -1,8 +1,7 @@
-class Node<T>(var value: T) {
-//    var value: T = value
-    var next: Node<T>? = null
-    var previous: Node<T>? = null
-}
+class Node<T>(var value: T,
+    var next: Node<T>? = null,
+    var previous: Node<T>? = null )
+
 
 enum class NodeInsertionMode { INSERT_BEFORE_NODE, INSERT_AFTER_NODE }
 
@@ -114,7 +113,18 @@ class LinkedList<T> {
         return "$s]"
     }
 
-    fun insertNodeAfterPredicateCheck(value: T, match: T, predicate: (Node<T>?, T) -> Boolean) : T? {
+    fun insertNodeBeforePredicateCheck(value: T, match: T, predicate: (Node<T>?, T) -> Boolean) : T? {
+        return insertNodeWithPredicateCheck(value, match, NodeInsertionMode.INSERT_BEFORE_NODE, predicate)
+    }
+
+    fun insertNodeAfterPredicateCheck(value: T, match: T, predicate: (Node<T>?, T)->Boolean) : T? {
+        return insertNodeWithPredicateCheck(value, match, NodeInsertionMode.INSERT_AFTER_NODE, predicate)
+    }
+
+    private fun insertNodeWithPredicateCheck(value: T,
+                                     match: T,
+                                     nodeInsertMode: NodeInsertionMode,
+                                     predicate: (Node<T>?, T) -> Boolean) : T? {
         var node = head
         while( node != null) {
             if( predicate(node, match) ) {
