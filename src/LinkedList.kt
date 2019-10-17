@@ -113,25 +113,24 @@ class LinkedList<T> {
         return "$s]"
     }
 
-    fun insertNodeBeforeUsingPredicateCheck(value: T, match: T, predicate: (Node<T>?, T) -> Boolean) : T? {
-        return insertNodeWithPredicateCheck(value, match, NodeInsertionMode.INSERT_BEFORE_NODE, predicate)
+    fun insertNodeBeforeUsingPredicateCheck(value: T, predicate: (Node<T>?) -> Boolean) : T? {
+        return insertNodeWithPredicateCheck(value, NodeInsertionMode.INSERT_BEFORE_NODE, predicate)
     }
 
-    fun insertNodeAfterUsingPredicateCheck(value: T, match: T, predicate: (Node<T>?, T) -> Boolean) : T? {
-        return insertNodeWithPredicateCheck(value, match, NodeInsertionMode.INSERT_AFTER_NODE, predicate)
+    fun insertNodeAfterUsingPredicateCheck(value: T, predicate: (Node<T>?) -> Boolean) : T? {
+        return insertNodeWithPredicateCheck(value, NodeInsertionMode.INSERT_AFTER_NODE, predicate)
     }
 
     private fun insertNodeWithPredicateCheck(value: T,
-                                     match: T,
-                                     nodeInsertMode: NodeInsertionMode,
-                                     predicate: (Node<T>?, T) -> Boolean) : T? {
+                                             nodeInsertMode: NodeInsertionMode,
+                                             predicate: (Node<T>?) -> Boolean) : T? {
         var node = head
         var prevNode = head
         while( node != null) {
-            if( predicate(node, match) ) {
+            if( predicate(node) ) {
                 when(nodeInsertMode) {
-                    NodeInsertionMode.INSERT_BEFORE_NODE -> insertBeforeThisNode(value, node, prevNode)
-                    NodeInsertionMode.INSERT_AFTER_NODE -> insertAfterThisNode(value, node)
+                    NodeInsertionMode.INSERT_BEFORE_NODE -> insertBeforeCurNode(value, node, prevNode)
+                    NodeInsertionMode.INSERT_AFTER_NODE -> insertAfterCurNode(value, node)
                 }
                 return node.value
             }
@@ -166,9 +165,9 @@ class LinkedList<T> {
             if (node.value == match) {
                 when(nodeInsertMode) {
                     NodeInsertionMode.INSERT_BEFORE_NODE ->
-                        insertBeforeThisNode(value, node, prevNode)
+                        insertBeforeCurNode(value, node, prevNode)
                     NodeInsertionMode.INSERT_AFTER_NODE ->
-                        insertAfterThisNode(value, node)
+                        insertAfterCurNode(value, node)
                 }
                 return value
             }
@@ -194,10 +193,10 @@ class LinkedList<T> {
             if (i == index) {
                 when (NodeInsertMode) {
                     NodeInsertionMode.INSERT_BEFORE_NODE ->
-                        insertBeforeThisNode(value, node, prevNode)
+                        insertBeforeCurNode(value, node, prevNode)
 
                     NodeInsertionMode.INSERT_AFTER_NODE ->
-                        insertAfterThisNode(value, node)
+                        insertAfterCurNode(value, node)
                 }
                 return node.value
             }
@@ -210,22 +209,22 @@ class LinkedList<T> {
         return null
     }
 
-    private fun insertBeforeThisNode(value: T, thisNode: Node<T>?, prevNode: Node<T>?) {
-        if (thisNode == head) { // special case for head
+    private fun insertBeforeCurNode(value: T, curNode: Node<T>?, prevNode: Node<T>?) {
+        if (curNode == head) { // special case for head
             head = Node(value)
-            head?.next = thisNode
+            head?.next = curNode
             head?.next?.previous = head
         } else {
             prevNode?.next = Node(value)
-            prevNode?.next?.next = thisNode
+            prevNode?.next?.next = curNode
             prevNode?.next?.previous = prevNode
-            thisNode?.previous = prevNode?.next
+            curNode?.previous = prevNode?.next
         }
     }
 
-    private fun insertAfterThisNode(value: T, thisNode: Node<T>?) {
-        val tmp = thisNode?.next
-        thisNode?.next = Node(value)
-        thisNode?.next?.next = tmp
+    private fun insertAfterCurNode(value: T, curNode: Node<T>?) {
+        val tmp = curNode?.next
+        curNode?.next = Node(value)
+        curNode?.next?.next = tmp
     }
 }

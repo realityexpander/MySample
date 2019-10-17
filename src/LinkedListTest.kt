@@ -99,18 +99,20 @@ internal class LinkedListTest {
 
     @Test
     fun insertNodeAfterUsingPredicateCheck() {
-        val pred : (Node<String>?, String)-> Boolean = {
-            node, str -> node?.value == str
+
+        val pred : (Node<String>?) -> Boolean = {
+            node-> node?.value == "unfindable element"
         }
         val startCount = ll.count()
 
-        ll.insertNodeAfterUsingPredicateCheck("New Element", "Zack")
-            { node, str -> node?.value == str }
+        ll.insertNodeAfterUsingPredicateCheck("New Element")
+            { node-> node?.value == "Zack" }
         println(ll)
         assert(ll.count() == startCount +1)
 
+        // should fail
         ll.insertNodeAfterUsingPredicateCheck("Shouldn't Insert element",
-                "XXXX", pred )
+                pred)
         println(ll)
         assert(ll.count() == startCount + 1)
 
@@ -118,19 +120,19 @@ internal class LinkedListTest {
 
     @Test
     fun insertNodeBeforeUsingPredicateCheck() {
-        val pred : (Node<String>?, String)-> Boolean = {
-            node, str -> node?.value == str
+        val pred : (Node<String>?)-> Boolean = {
+            node -> node?.value == "unfindable element"
         }
         val startCount = ll.count()
 
-        ll.insertNodeBeforeUsingPredicateCheck("New Element", "Zack")
-        { node, str -> node?.value == str }
+        ll.insertNodeBeforeUsingPredicateCheck("New Element")
+            { node -> node?.value == "Zack" }
         println(ll)
         assert(ll.count() == startCount +1)
         assert(ll.nodeAtIndex(2)?.value == "New Element")
 
-        ll.insertNodeBeforeUsingPredicateCheck("Shouldn't Insert element",
-                "XXXX", pred )
+        // should fail
+        ll.insertNodeBeforeUsingPredicateCheck("Shouldn't Insert element", pred )
         println(ll)
         assert(ll.count() == startCount + 1)
     }
