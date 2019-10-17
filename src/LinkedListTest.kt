@@ -3,7 +3,7 @@ import org.junit.jupiter.api.Test
 
 internal class LinkedListTest {
 
-    var ll = LinkedList<String>()
+    private var ll = LinkedList<String>()
 
     @org.junit.jupiter.api.BeforeEach
     fun setUp() {
@@ -127,18 +127,18 @@ internal class LinkedListTest {
         { node, str -> node?.value == str }
         println(ll)
         assert(ll.count() == startCount +1)
+        assert(ll.nodeAtIndex(2)?.value == "New Element")
 
         ll.insertNodeBeforeUsingPredicateCheck("Shouldn't Insert element",
                 "XXXX", pred )
         println(ll)
         assert(ll.count() == startCount + 1)
-
     }
 
     @Test
     fun contains() {
         assertTrue(ll.contains("Zack"), "Should contain Zack")
-        assertFalse(ll.contains("Missing ELement"), "Should not contain Element")
+        assertFalse(ll.contains("Missing Element"), "Should not contain Element")
     }
 
     @org.junit.jupiter.api.Test
@@ -156,6 +156,8 @@ internal class LinkedListTest {
     fun removeAll() {
         ll.removeAll()
         assert(ll.count() == 0)
+
+        assert(ll.isEmpty)
     }
 
     @Test

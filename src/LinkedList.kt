@@ -67,7 +67,7 @@ class LinkedList<T> {
         head = null
     }
 
-    fun removeNode(node: Node<T>): T { // why remove T here to remove the return stmnt?
+    fun removeNode(node: Node<T>): T? { // why remove T here to remove the return stmnt?
         val prev = node.previous
         val next = node.next
         if (prev != null) {
@@ -94,7 +94,7 @@ class LinkedList<T> {
     fun removeAtIndex(index: Int): T? {
         val node = nodeAtIndex(index)
         return if (node != null) {
-            removeNode(node)
+            return removeNode(node)
         } else {
             null
         }
@@ -126,11 +126,16 @@ class LinkedList<T> {
                                      nodeInsertMode: NodeInsertionMode,
                                      predicate: (Node<T>?, T) -> Boolean) : T? {
         var node = head
+        var prevNode = head
         while( node != null) {
             if( predicate(node, match) ) {
-                insertAfterThisNode(value, node)
+                when(nodeInsertMode) {
+                    NodeInsertionMode.INSERT_BEFORE_NODE -> insertBeforeThisNode(value, node, prevNode)
+                    NodeInsertionMode.INSERT_AFTER_NODE -> insertAfterThisNode(value, node)
+                }
                 return node.value
             }
+            prevNode = node
             node = node.next
         }
         return null

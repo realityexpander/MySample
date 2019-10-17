@@ -1,7 +1,7 @@
 fun main(args: Array<String>) {
     //var bev = readLine() // wait for keybd input
     var bev = "chris athanas"
-    var swords : Int? = 2
+    val swords : Int? = 2
     bev.let {
         bev = it.split(" ")
                 .asSequence()
@@ -18,7 +18,7 @@ fun main(args: Array<String>) {
 
     println(bev)
 
-    var player = Player()
+    val player = Player()
 
     player.name = "Jimbo"
     player.castFireball(3)
@@ -26,12 +26,12 @@ fun main(args: Array<String>) {
     val s = Sword("Abcdefg")
     println(s.name)
 
-    var list = addToList()
+    val list = addToList()
     println(list)
 
 
     // Linked list implementation
-    var ll = LinkedList<String>()
+    val ll = LinkedList<String>()
     ll.append("John")
     println(ll)
     ll.append("Carl")
@@ -79,7 +79,7 @@ fun main(args: Array<String>) {
 }
 
 
-class UnskilledSwordJUgglerException() :
+class UnskilledSwordJUgglerException :
         IllegalStateException("Player cannot juggle swords")
 
 class Sword(_name: String) {
