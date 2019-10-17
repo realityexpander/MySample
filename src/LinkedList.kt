@@ -15,27 +15,27 @@ class LinkedList<T> {
 
     fun last(): Node<T>? {
         var node = head
-        return if (node != null) {
+        if (node != null) {
             while (node?.next != null) {
                 node = node.next
             }
-            node
+            return node
         } else {
-            null
+            return null
         }
     }
 
     fun count(): Int {
         var node = head
-        return if (node != null) {
+        if (node != null) {
             var counter = 1
             while (node?.next != null) {
                 node = node.next
                 counter += 1
             }
-            counter
+            return counter
         } else {
-            0
+            return 0
         }
     }
 
@@ -67,7 +67,7 @@ class LinkedList<T> {
         head = null
     }
 
-    fun removeNode(node: Node<T>): T? { // why remove T here to remove the return stmnt?
+    fun removeNode(node: Node<T>): T? {
         val prev = node.previous
         val next = node.next
         if (prev != null) {
