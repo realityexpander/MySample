@@ -114,13 +114,14 @@ class LinkedList<T> {
         return "$s]"
     }
 
-    fun insertAfterPredicateCheck(value: T, predicate: (Node<T>?, T)->Boolean) : T? {
-        val node = head
+    fun insertNodeAfterPredicateCheck(value: T, match: T, predicate: (Node<T>?, T) -> Boolean) : T? {
+        var node = head
         while( node != null) {
-            if( predicate(node, value) ) {
+            if( predicate(node, match) ) {
                 insertAfterThisNode(value, node)
                 return node.value
             }
+            node = node.next
         }
         return null
     }

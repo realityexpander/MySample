@@ -1,6 +1,5 @@
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import kotlin.test.assertFalse
 
 internal class LinkedListTest {
 
@@ -98,6 +97,25 @@ internal class LinkedListTest {
         assert(ll.first()?.value == "John")
     }
 
+    @Test
+    fun insertNodeAfterPredicateCheck() {
+        val pred : (Node<String>?, String)-> Boolean = {
+            node, str -> node?.value == str
+        }
+        val startCount = ll.count()
+
+        ll.insertNodeAfterPredicateCheck("New Element", "Zack")
+            { node, str -> node?.value == str }
+        println(ll)
+        assert(ll.count() == startCount +1)
+
+        ll.insertNodeAfterPredicateCheck("Shouldn't Insert element", match = "XXXX", predicate = {
+            node, str -> node?.value == str
+        })
+        println(ll)
+        assert(ll.count() == startCount + 1)
+
+    }
 
     @org.junit.jupiter.api.Test
     fun last() {
