@@ -105,13 +105,13 @@ internal class LinkedListTest {
         }
         val startCount = ll.count()
 
-        ll.insertNodeAfterUsingPredicateCheck("New Element")
+        ll.insertNodeAfterUsingPredicate("New Element")
             { node-> node?.value == "Zack" }
         println(ll)
         assert(ll.count() == startCount +1)
 
         // should fail
-        ll.insertNodeAfterUsingPredicateCheck("Shouldn't Insert element",
+        ll.insertNodeAfterUsingPredicate("Shouldn't Insert element",
                 pred)
         println(ll)
         assert(ll.count() == startCount + 1)
@@ -125,14 +125,14 @@ internal class LinkedListTest {
         }
         val startCount = ll.count()
 
-        ll.insertNodeBeforeUsingPredicateCheck("New Element")
+        ll.insertNodeBeforeUsingPredicate("New Element")
             { node -> node?.value == "Zack" }
         println(ll)
         assert(ll.count() == startCount +1)
         assert(ll.nodeAtIndex(2)?.value == "New Element")
 
         // should fail
-        ll.insertNodeBeforeUsingPredicateCheck("Shouldn't Insert element", pred )
+        ll.insertNodeBeforeUsingPredicate("Shouldn't Insert element", pred )
         println(ll)
         assert(ll.count() == startCount + 1)
     }
