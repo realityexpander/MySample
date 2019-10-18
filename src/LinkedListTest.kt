@@ -98,7 +98,7 @@ internal class LinkedListTest {
     }
 
     @Test
-    fun insertNodeAfterUsingPredicateCheck() {
+    fun insertNodeAfterUsingPredicate() {
 
         val pred : (Node<String>?) -> Boolean = {
             node-> node?.value == "unfindable element"
