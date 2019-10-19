@@ -1,9 +1,14 @@
+import kotlin.reflect.full.*
+import kotlin.reflect.jvm.jvmName
+
 interface InterfaceName {
     abstract val name: String // var must be in scope of implementing class
 
     fun displayName() {
         println("<InterfaceName> displayName() $name")
     }
+
+//    abstract fun setName(s: String)
 }
 interface InterfaceSSN : InterfaceName {
     abstract val ssn: String // found in scope of implementing class
@@ -41,8 +46,8 @@ interface InterfaceCar : InterfaceVehicle {
         println("<InterfaceCar> displayCar(message) car=$car, message=\"$message\", displayCarCount=$displayCarCount")
     }
     fun displayCar() {
-        displayCar("<InterfaceCar>starting displayCarCount=$displayCarCount")
         displayVehicle(car)
+        displayCar("displayCarCount=$displayCarCount")
         numWheels += 1
     }
 }
@@ -72,6 +77,34 @@ data class DNDStats( var valSTR: Int,
                     var valHP: Int )
 
 abstract class AbstractPerson(name: String) {
+//    private var _name: String = name // constructed here
+//    val name: String // constructed here
+//        get() = _name
+//    internal fun setName(name: String) {
+//        _name = name
+//    }
+
+    var name: String = name
+        internal set
+
+    private var dingDangIt: String = "Dang" // Showing abstract class state
+
+
+    init {
+        println("\n<AbstractPerson> init() person: name=$name. [$dingDangIt]")
+        dingDangIt = "Ding"
+    }
+
+    fun getDing(): String {
+        return "[$dingDangIt]"
+    }
+
+    override fun toString(): String {
+        return "name=$name"
+    }
+}
+
+open class Person(name:String) {
     private var _name: String = name // constructed here
     val name: String // constructed here
         get() = _name
@@ -81,7 +114,7 @@ abstract class AbstractPerson(name: String) {
     }
 
     init {
-        println("\n<AbstractPerson> init() person: name=$name.")
+        println("\n<Person> init() person: name=$name.")
     }
 
     override fun toString(): String {
@@ -96,7 +129,7 @@ abstract class AbstractPersonWithJob : AbstractPerson, InterfaceJob {
     constructor(name: String, ssn: String, job: String) : super(name) {
         this.ssn = ssn
         this.job = job
-        this.setName("$name ***")
+        this.name ="$name ***"
         println("<AbstractPersonWithJob> constructor() name=${this.name}, ssn=$ssn and my job is $job")
     }
     constructor(name: String,
@@ -112,17 +145,17 @@ abstract class AbstractPersonWithJob : AbstractPerson, InterfaceJob {
 //    }
 
     override fun toString(): String {
-        return "ssn=$ssn, job=$job, " + super<AbstractPerson>.toString()
+        return "ssn=$ssn, job=$job, " + super.toString()
     }
 
 }
 
-class PersonDNDWithJob(override val name: String, // InterfaceName
+class PersonDNDWithJob(name: String, // InterfaceName
                        var position: Position,  // InterfaceDNDStats
                        override var stats: DNDStats,
                        override val ssn: String,  // InterfaceDNDStats
                        override var job: String  // InterfaceJob, var stats: DNDStats){}
-) :  InterfaceJob, InterfaceDNDStats {
+) :  AbstractPerson(name), InterfaceJob, InterfaceDNDStats {
     init {
         println("A New hero Enters: $name")
     }
@@ -149,6 +182,16 @@ class Intern(name: String, // passed to the AbstractPerson constructor first
     override fun toString(): String {
         return "job=$job, ssn=$ssn, gradYear=${gradYear}, " + super<AbstractPerson>.toString()
     }
+}
+
+class StudentViaOnlyInterfaces(override val name: String,
+                               override val ssn: String,
+                               override val car: String = "Unknown Car"
+                           ) : InterfaceSSN, InterfaceCar {
+    override var vehicleType: String = "Unknown Vehicle Type"
+    override var numWheels: Int = 4
+    override var displayCarCount: Int = 0
+
 }
 
 class Student(name: String, // created in AbstractPerson
@@ -268,10 +311,10 @@ class PersonWithJobViaAbstractClass(name: String,
     }
 }
 
-class PersonWithJobViaInterfaces(name: String,
+class PersonWithJobViaInterfaces(override val name: String,
                                  override val ssn: String,
                                  override var job: String
-                                ) : AbstractPerson(name), InterfaceJob {
+) :  InterfaceJob {
 
     init {
         println("<PersonWithJobViaInterfaces> init() Person:$name, job=$job, ssn=$ssn")
@@ -325,15 +368,20 @@ class PersonWithJobAndCar(name: String,
 
 
 fun doTeacherStudent() {
-//    val teach = Teacher("teach Ms. Mills", "123-56-7890", "Math Teacher", 10000)
+    val teach = Teacher("teach Ms. Mills", "123-56-7890", "Math Teacher", 10000)
 //    val student = Student("s1 Little Jimmy", "223-32-1234", 2, "Erase chalkboards")
 //    val student2 = Student("s2 Useless Johnny", "123-232-5634", 3)
 //    student2.car = "Old Junker Ford"
 //    val parent = Parent("parent Mr. BigShot", "Banker")
 //    parent.job = "Unemployed"
-    val personWithCar = PersonWithCar("personJobAndCar Mr. Nobody",
-            "Black Limousine",
-            vehicleType = "1988 Fleetwood")
+//    val personWithCar = PersonWithCar("personJobAndCar Mr. Nobody",
+//            "Black Limousine",
+//            vehicleType = "1988 Fleetwood")
+
+//    val studentViaInterfaces = StudentViaOnlyInterfaces("StudentViaInterfaces Billy Jo",
+//            "396-53-2342",
+//            "Dune Buggy Kit Car")
+//    studentViaInterfaces.vehicleType = "Rad '60s runabout"
 
 //    val personWithJobAndCar = PersonWithJobAndCar("personWithJobAndCar Mr. Somebody", "123-23-3232", "Butcher", "Red Jeep", "Sport Utility")
 //        personWithJobAndCar.job = "Simple Job"
@@ -343,8 +391,12 @@ fun doTeacherStudent() {
 //    val intern = Intern("intern Sally", "454-34-23443", "Ms. Mills Class", 2022)
 //    intern.setName("Little sally")
 //
-//    val stats = DNDStats(10, 20, 20, 10)
-//    val personDND = PersonDNDWithJob("Victorious Hero", Position("This is it", "my job"), stats, "123-23-2211", "Teleprompter" )
+    val stats = DNDStats(10, 20, 20, 10)
+    val personDND = PersonDNDWithJob("Victorious Hero",
+                        Position("This is it", "my job"),
+                        stats, "123-23-2211",
+                        "Dragon Slayer" )
+    personDND.name = "Slayer of Dragon"
 
     println("\n")
 
@@ -352,8 +404,9 @@ fun doTeacherStudent() {
 //    personDND.displayJob()
 //    personDND.displayPosition()
 
-//    teach.displayJob()
-//    teach.displaySSN()
+    teach.displayJob()
+    teach.displaySSN()
+    println("teach.dingDangIt=${teach.getDing()}")
 
 //    student.displayJob()
 //    student.displaySSN()
@@ -366,9 +419,13 @@ fun doTeacherStudent() {
 //    student2.displayCar()
 //      println(with(student2) {"student2 gradeLevel=${gradeLevel}, chore=${chore}"} )
 
-    personWithCar.displayCar()
-    println(personWithCar.toString())
-    println("${personWithCar.numWheels}, ${personWithCar.displayCarCount}")
+//    personWithCar.displayCar()
+//    println(personWithCar.toString())
+//    println("${personWithCar.numWheels}, ${personWithCar.displayCarCount}")
+
+//    studentViaInterfaces.displayCar()
+//    println(studentViaInterfaces.numWheels)
+
 
 //    personWithJobAndCar.displayJobAndCar()
 

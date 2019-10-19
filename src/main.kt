@@ -3,6 +3,9 @@
 public var foo: String = "hello"
 
 fun main(args: Array<String>) {
+
+    main2(args)
+
     //var bev = readLine() // wait for keybd input
     var bev = "chris athanas"
     val swords : Int? = 2
