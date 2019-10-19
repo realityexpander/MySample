@@ -11,7 +11,7 @@ fun main(args: Array<String>) {
 
 
     try {
-        swords ?: throw UnskilledSwordJUgglerException()
+        swords ?: throw UnskilledSwordJugglerException()
     } catch(e:Exception){
         println(e)
     }
@@ -29,8 +29,23 @@ fun main(args: Array<String>) {
     val list = addToList()
     println(list)
 
-
     // Linked list implementation
+    runLinkedListTesting()
+
+    val intArray = intArrayOf(4, 2, 3, 1)
+
+    // before sorting
+    println(intArray.joinToString()) //joinToString()) // 4, 3, 2, 1
+    intArray.sortDescending()
+    // after sorting
+    println(intArray.joinToString()) // 1, 2, 3, 4
+
+    println("\n\n")
+
+    doTeacherStudent()
+}
+
+private fun runLinkedListTesting() {
     val ll = LinkedList<String>()
     ll.append("John")
     println(ll)
@@ -50,36 +65,11 @@ fun main(args: Array<String>) {
     println("second item: ${ll.first()?.next?.value}")
     println("penultimate item: ${ll.last()?.previous?.value}")
     println("4th item: ${ll.nodeAtIndex(3)?.value}")
-
     println("\nthe list has ${ll.count()} items: $ll")
-
-    ll.removeAtIndex(2)
-    println(" 'remove 3rd item': ${ll.nodeAtIndex(2)?.value} items: $ll")
-    println("the list has ${ll.count()} items: $ll")
-    ll.nodeAtIndex(0)?.let { ll.removeNode(it) }
-    println(" 'removing node 0', the list has ${ll.count()} items: $ll")
-
-    ll.insertAfterMatch("This is after Tim", "Tim")
-    println("\n 'insert after Tim': $ll")
-
-    ll.insertAfterMatch( "This is after Peter", "Peter")
-    println(" 'insert after Peter': $ll")
-
-    ll.insertBeforeMatch("Carl", "Before Carl")
-    println("\n 'insert before Carl' on Head: $ll")
-
-    ll.insertBeforeMatch("Tim" , "Before Tim")
-    println(" 'insert before Tim' on middle of list: $ll")
-    
-    ll.insertAfterIndex("inserted after 3rd", 2)
-    println("\n insert after index 2: $ll")
-
-    ll.insertBeforeIndex("inserted before 2nd", 1)
-    println("\n insert before index 1: $ll")
 }
 
 
-class UnskilledSwordJUgglerException :
+class UnskilledSwordJugglerException :
         IllegalStateException("Player cannot juggle swords")
 
 class Sword(_name: String) {
