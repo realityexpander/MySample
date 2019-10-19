@@ -1,3 +1,7 @@
+
+
+public var foo: String = "hello"
+
 fun main(args: Array<String>) {
     //var bev = readLine() // wait for keybd input
     var bev = "chris athanas"
