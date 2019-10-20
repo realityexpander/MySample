@@ -5,14 +5,14 @@ class CountingList<T>(
     var addCount = 0
         private set
 
-    override fun add(o: T): Boolean {
+    override fun add(element: T): Boolean {
         addCount += 1
-        return newThis.add(o)
+        return newThis.add(element)
     }
 
-    override fun addAll(collection: Collection<T>): Boolean {
-        addCount += collection.size
-        return newThis.addAll(collection)
+    override fun addAll(elements: Collection<T>): Boolean {
+        addCount += elements.size
+        return newThis.addAll(elements)
     }
 }
 
@@ -23,9 +23,9 @@ class CountingLinkedList<T>(
     var addCount = 0
         private set
 
-    override fun add(o: T) {
+    override fun add(value: T) {
         addCount += 1
-        innerObject.add(o)
+        innerObject.add(value)
     }
 
     override fun removeAll() {
@@ -42,13 +42,13 @@ class CountingLinkedList<T>(
 fun main4( args: Array<String>) {
 //    val list = CountingList<String>()
     val list = CountingLinkedList<String>()
-//    val list2 = LinkedList<String>()
+//    val list = LinkedList<String>()
 
     list.add("hello")
     list.add("Jimmy")
     list.add("George")
-    println("${list.addCount}=$list, $list2")
-    list.removeAll(); list2.removeAll()
-    println("${list.addCount}=$list, $list2")
+    println("${list.addCount}=$list")
+    list.removeAll()
+    println("${list.addCount}=$list")
 
 }

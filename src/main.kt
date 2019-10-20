@@ -4,7 +4,7 @@ public var foo: String = "hello"
 
 fun main(args: Array<String>) {
 
-    main4(args)
+    mainBattleGame()
 
     println()
 
