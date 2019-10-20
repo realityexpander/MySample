@@ -4,43 +4,46 @@ public var foo: String = "hello"
 
 fun main(args: Array<String>) {
 
-    main2(args)
+    main4(args)
 
-    //var bev = readLine() // wait for keybd input
-    var bev = "chris athanas"
-    val swords : Int? = 2
-    bev.let {
-        bev = it.split(" ")
-                .asSequence()
-                .map{ s -> s.capitalize()}
-                .joinToString(" ")
-    } //?: println("i cant do that without crashing")
+    println()
+
+//    //var bev = readLine() // wait for keybd input
+//    var bev = "chris athanas"
+//    val swords : Int? = 2
+//    bev.let {
+//        bev = it.split(" ")
+//                .asSequence()
+//                .map{ s -> s.capitalize()}
+//                .joinToString(" ")
+//    } //?: println("i cant do that without crashing")
+//
+//
+//    try {
+//        swords ?: throw UnskilledSwordJugglerException()
+//    } catch(e:Exception){
+//        println(e)
+//    }
+//
+//    println(bev)
+//
+//    val player = Player()
+//    player.name = "Jimbo"
+//    player.castFireball(3)
+//
+//    val s = Sword("Abcdefg")
+//    println(s.name)
+//
+//    val list = addToList()
+//    println(list)
 
 
-    try {
-        swords ?: throw UnskilledSwordJugglerException()
-    } catch(e:Exception){
-        println(e)
-    }
+//    // Linked list implementation
+//    runLinkedListTesting()
 
-    println(bev)
 
-    val player = Player()
-
-    player.name = "Jimbo"
-    player.castFireball(3)
-
-    val s = Sword("Abcdefg")
-    println(s.name)
-
-    val list = addToList()
-    println(list)
-
-    // Linked list implementation
-    runLinkedListTesting()
 
     val intArray = intArrayOf(4, 2, 3, 1)
-
     // before sorting
     println(intArray.joinToString()) //joinToString()) // 4, 3, 2, 1
     intArray.sortDescending()
@@ -49,7 +52,7 @@ fun main(args: Array<String>) {
 
     println("\n\n")
 
-    doTeacherStudent()
+    //doTeacherStudent()
 }
 
 private fun runLinkedListTesting() {

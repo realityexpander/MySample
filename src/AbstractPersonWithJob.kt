@@ -51,7 +51,7 @@ interface InterfaceCar : InterfaceVehicle {
         numWheels += 1
     }
 }
-interface InterfaceJobAndCar : InterfaceJob, InterfaceCar{
+interface InterfaceJobAndCar : InterfaceJob, InterfaceCar {
     fun displayJobAndCarInit() : Boolean // Implementing Class must implement this fun signature
 
     fun displayJobAndCar(){ // Default Fun provided
@@ -67,6 +67,11 @@ interface InterfaceDNDStats : InterfaceName {
         with (stats) {
             println("DND Stats for $name: STR:$valSTR, DEX:$valDEX, CHR:$valCHR, HP:$valHP")
         }
+    }
+
+    fun subtractHitPoints() {
+        stats.valHP -= 10
+        println("${stats.valHP}")
     }
 }
 
@@ -156,6 +161,7 @@ class PersonDNDWithJob(name: String, // InterfaceName
                        override val ssn: String,  // InterfaceDNDStats
                        override var job: String  // InterfaceJob, var stats: DNDStats){}
 ) :  AbstractPerson(name), InterfaceJob, InterfaceDNDStats {
+
     init {
         println("A New hero Enters: $name")
     }
@@ -163,14 +169,14 @@ class PersonDNDWithJob(name: String, // InterfaceName
     fun displayPosition() {
         println("Position for $name: ${position.name}@${position.position}")
     }
+
 }
 
 class Intern(name: String, // passed to the AbstractPerson constructor first
              override val ssn: String,
              override var job: String,
              private var gradYear: Int
-            ): AbstractPerson(name),
-                   InterfaceJob {
+            ): AbstractPerson(name), InterfaceJob {
     init {
         println("<Intern> init() name=$name, ssn=$ssn, gradYear=$gradYear")
     }
@@ -347,8 +353,7 @@ class PersonWithJobAndCar(name: String,
                           override var job: String,
                           override val car: String = "Unknown Car",
                           override val vehicleType: String = "Unknown Car"
-                         ) : AbstractPerson(name),
-                                 InterfaceJobAndCar {
+                         ) : AbstractPerson(name), InterfaceJobAndCar {
     override var numWheels: Int = 4
 
     override fun displayJobAndCarInit(): Boolean {
@@ -372,6 +377,7 @@ fun doTeacherStudent() {
 //    val student = Student("s1 Little Jimmy", "223-32-1234", 2, "Erase chalkboards")
 //    val student2 = Student("s2 Useless Johnny", "123-232-5634", 3)
 //    student2.car = "Old Junker Ford"
+
 //    val parent = Parent("parent Mr. BigShot", "Banker")
 //    parent.job = "Unemployed"
 //    val personWithCar = PersonWithCar("personJobAndCar Mr. Nobody",
@@ -388,13 +394,15 @@ fun doTeacherStudent() {
 
 //    val personWithJobAbs = PersonWithJobViaAbstractClass("personWithJobViaAbstract Ol' Joe", "123-23-1223", "Jet mechanic")
 //    val personNamedWithJobInt = PersonWithJobViaInterfaces("personWithJobViaInterfaces Good Ol' Jack", "123-54-3434", "Car Junker")
+
 //    val intern = Intern("intern Sally", "454-34-23443", "Ms. Mills Class", 2022)
 //    intern.setName("Little sally")
 //
     val stats = DNDStats(10, 20, 20, 10)
     val personDND = PersonDNDWithJob("Victorious Hero",
                         Position("This is it", "my job"),
-                        stats, "123-23-2211",
+                        stats,
+                        "123-23-2211",
                         "Dragon Slayer" )
     personDND.name = "Slayer of Dragon"
 
@@ -425,7 +433,6 @@ fun doTeacherStudent() {
 
 //    studentViaInterfaces.displayCar()
 //    println(studentViaInterfaces.numWheels)
-
 
 //    personWithJobAndCar.displayJobAndCar()
 

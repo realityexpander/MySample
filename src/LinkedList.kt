@@ -5,7 +5,12 @@ class Node<T>(var value: T,
 
 enum class NodeInsertionMode { INSERT_BEFORE_NODE, INSERT_AFTER_NODE }
 
-class LinkedList<T> {
+interface ILinkedList<T> {
+    fun add(value: T)
+    fun removeAll()
+}
+
+open class LinkedList<T>: ILinkedList<T> {
 
     private var head: Node<T>? = null
 
@@ -52,6 +57,10 @@ class LinkedList<T> {
         return null
     }
 
+    override fun add(value: T) {
+        append(value)
+    }
+
     fun append(value: T) {
         val newNode = Node(value)
         val lastNode = this.last()
@@ -63,7 +72,7 @@ class LinkedList<T> {
         }
     }
 
-    fun removeAll() {
+    override fun removeAll() {
         head = null
     }
 
