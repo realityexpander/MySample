@@ -6,12 +6,10 @@ interface IFighter {
     fun turnEnd() {}
 
 }
-
 interface ICharacter : IFighter {
     val nameFighter: String
 //        get() = this.javaClass.name
 }
-
 interface IWarrior : ICharacter {
     val strength: Int
 
@@ -20,12 +18,6 @@ interface IWarrior : ICharacter {
         opponent.lifePoints -= strength
     }
 }
-
-data class Spell(
-    var manaCost: Int = 10,
-    var strength: Int = 5,
-    var name: String = "Magic Missile" )
-
 interface ISorcerer : ICharacter {
     val spell: Spell
     var manaPoints: Int
@@ -47,6 +39,11 @@ interface ISorcerer : ICharacter {
     }
 }
 
+data class Spell(
+    var manaCost: Int = 10,
+    var strength: Int = 5,
+    var name: String = "Magic Missile" )
+
 data class Goblin(override var lifePoints: Int = 50,
                   override var nameFighter: String = "Blue Goblin") : ICharacter {
 
@@ -55,7 +52,6 @@ data class Goblin(override var lifePoints: Int = 50,
         opponent.lifePoints -= 5
     }
 }
-
 data class Minsk(override var lifePoints: Int = 60) : IWarrior {
     override var nameFighter: String = this.javaClass.name
     override val strength: Int = 15
@@ -64,7 +60,6 @@ data class Minsk(override var lifePoints: Int = 60) : IWarrior {
         meleeAttack(opponent)
     }
 }
-
 data class Wizard(override var lifePoints: Int = 50,
                   override val spell: Spell = Spell(),
                   override var manaPoints: Int = 20
@@ -76,7 +71,6 @@ data class Wizard(override var lifePoints: Int = 50,
         castSpell(opponent)
     }
 }
-
 data class Artur(override var lifePoints: Int = 150,
                  override var manaPoints: Int = 10
 ) : IWarrior, ISorcerer {
@@ -108,10 +102,6 @@ abstract class AbstractTeacherISorcerer(teacher: Teacher
     override var manaPoints: Int = 10
     override val spell: Spell = Spell(5, 5, "Pop Quiz")
 
-    init {
-        setLoadingCompleted( this)
-    }
-
     override fun attack(opponent: IFighter) {
         println("The Teacher $namePerson assigns [${spell.name}] (${spell.strength})")
         castSpell(opponent)
@@ -126,13 +116,14 @@ abstract class AbstractTeacherISorcerer(teacher: Teacher
 
 }
 
-private fun <T : AbstractPersonIName> setLoadingCompleted(localThis: T) {
-    (localThis as T).setLoadingStatus("Loaded")
-    println("* <${(localThis as T).javaClass.name}> init() ${localThis.toString()}")
-}
 
 class TeacherSorcerer(teacher: Teacher = Teacher()) : AbstractTeacherISorcerer(teacher) {
     override var nameFighter: String = teacher.namePerson + "<${this.javaClass.name}>"
+
+
+    init {
+        setLoadingCompleted(this)
+    }
 }
 
 class TeacherIWarriorISorcerer(teacher: Teacher = Teacher()
@@ -144,10 +135,9 @@ class TeacherIWarriorISorcerer(teacher: Teacher = Teacher()
     override var manaPoints: Int = 10
     override val nameFighter: String = teacher.namePerson.reversed() + "<TeacherIWarriorISorcerer>"
 
+
     init {
-//        this.setLoadingStatus("Loaded")
-//        println("<${this.javaClass.name}> init() ${this.toString()}")
-        setLoadingCompleted( this)
+        setLoadingCompleted(this)
     }
 
     override fun attack(opponent: IFighter) {
@@ -188,6 +178,8 @@ fun mainBattleGame() {
     val teacher = Teacher("Ms. Mills", "123-56-7890", "Remedial Math", 10000)
     val teacherSorcerer = TeacherIWarriorISorcerer(teacher)
     val teacherSorcerer2 = TeacherSorcerer(teacher)
+    teacherSorcerer.setLoadingStatus("Loaded")
+    teacherSorcerer2.setLoadingStatus("Loaded")
 
     println()
     simulateCombat(teacherSorcerer2, teacherSorcerer)

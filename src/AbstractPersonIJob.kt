@@ -72,6 +72,14 @@ interface InterfaceDNDStats  : InterfaceName {
     }
 }
 
+// I can't believe i wrote this function
+//        this.setLoadingStatus("Loaded")
+//        println("<${this.javaClass.name}> init() ${this.toString()}")
+fun <T : AbstractPersonIName> setLoadingCompleted(localThis: T) {
+    (localThis as T).setLoadingStatus("Loaded")
+    println("* <${(localThis as T).javaClass.name}> init() ${localThis.toString()}")
+}
+
 data class Position(var name: String, var position: String)
 data class DNDStats(var valSTR: Int,
                     var valDEX: Int,
