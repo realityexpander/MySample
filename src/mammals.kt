@@ -68,6 +68,7 @@ fun Mammal.isEndangered(): Boolean {
 }
 
 fun mammalFactCheck(mammal: Mammal, factCheck: KFunction1<Mammal, Int>): Int {
+    println("$mammal = ${factCheck(mammal)}")
     return factCheck(mammal)
 }
 
@@ -85,8 +86,7 @@ fun mainMammals() {
 //        slothActivity(it, it.relief())
 
     slothCrew.forEach {
-            mammalFactCheck(it, Mammal::vertebraeCount)
-            mammalFactCheck(it, Mammal::knownSpeciesCount)
-        }
+        mammalFactCheck(it, Mammal::vertebraeCount)
+        mammalFactCheck(it, Mammal::knownSpeciesCount)
     }
 }

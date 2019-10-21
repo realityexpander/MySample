@@ -1,5 +1,3 @@
-typealias UnskilledSwordJugglerException = kotlin.RuntimeException
-
 fun mainPlayerSwordGame() {
 
 //    var bev = readLine() // wait for keybd input
@@ -13,11 +11,12 @@ fun mainPlayerSwordGame() {
     } //?: println("i cant do that without crashing")
 
 
-//    try {
-//        swords ?: throw UnskilledSwordJugglerException
-//    } catch (e: Exception) {
-//        println(e)
-//    }
+    try {
+//        swords ?: throw UnskilledSwordJugglerException()
+        swords ?: throw UnskilledSwordJugglerDescriptionException()
+    } catch (e: Exception) {
+        println(e)
+    }
 
     println(bev)
 
