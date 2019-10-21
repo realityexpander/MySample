@@ -1,5 +1,5 @@
 interface InterfaceName {
-    abstract var namePerson: String // var must be in scope of implementing class
+    abstract val namePerson: String // var must be in scope of implementing class
 
     fun displayName() {
         println("<InterfaceName> displayName() $namePerson")
@@ -78,7 +78,7 @@ data class DNDStats(var valSTR: Int,
                     var valCHR: Int,
                     var valHP: Int )
 
-abstract class AbstractPersonIName(override var namePerson: String) : InterfaceName {
+abstract class AbstractPersonIName(override val namePerson: String) : InterfaceName {
 //    private var _name: String = name // constructed here
 //    val name: String // constructed here
 //        get() = _name
@@ -93,12 +93,14 @@ abstract class AbstractPersonIName(override var namePerson: String) : InterfaceN
 
 
     init {
-        loadingStatus = "Loaded"
         println("\n<AbstractPerson> init() ${this.toString()}}")
     }
 
-    fun getLoadingStatus(): String {
+    private fun getLoadingStatus(): String {
         return "[$loadingStatus]"
+    }
+    fun setLoadingStatus(status: String) {
+        loadingStatus = status
     }
 
     override fun toString(): String {
@@ -196,7 +198,7 @@ class Intern(name: String, // passed to the AbstractPerson constructor first
     }
 }
 
-class StudentViaOnlyInterfaces(override var namePerson: String,
+class StudentViaOnlyInterfaces(override val namePerson: String,
                                override var ssn: String,
                                override val car: String = "Unknown Car"
                            ) : InterfaceSSN, InterfaceCar {
@@ -206,23 +208,19 @@ class StudentViaOnlyInterfaces(override var namePerson: String,
 
 }
 
-class Student(name: String, // created in AbstractPerson
+class Student(name: String,
               override var ssn: String, // created for InterfaceSSN
-              var gradeLevel: Int,
+              var gradeLevel: Int = 1,
               var chore: String = "NO CHORES ASSIGNED",
               override var car: String = "Ferrari", // created for InterfaceCar
-              override val vehicleType: String  = "Unknown Vehicle"// created for InterfaceVehicle
+              override var vehicleType: String  = "Unknown Vehicle"// created for InterfaceVehicle
 ) : AbstractPersonIName(name), InterfaceCar, InterfaceSSN {
 
     override var displayCarCount: Int = 0
     override var numWheels: Int = 4
 
-    constructor(name: String,
-                ssn: String,
-                gradeLevel: Int
-               ): this(name,
-                        ssn,
-                        gradeLevel,
+    constructor(name: String, ssn: String, gradeLevel: Int
+                ): this(name, ssn, gradeLevel,
                         "NO CHORES ASSIGNED",
                         "NO CAR ASSIGNED",
                         "NO VEHICLE ASSIGNED"
@@ -334,7 +332,7 @@ class PersonIJobViaAbstractClass(name: String,
     }
 }
 
-class PersonIJobViaInterfaces(override var namePerson: String,
+class PersonIJobViaInterfaces(override val namePerson: String,
                               override var ssn: String,
                               override var job: String
 ) :  InterfaceJob {
@@ -432,7 +430,7 @@ fun mainTeacherStudent() {
             PersonIJobViaInterfaces("personWithJobViaInterfaces Good Ol' Jack", "123-54-3434", "Car Junker")
     fun intern(): Intern {
         val intern = Intern("intern Sally", "454-34-23443", "Ms. Mills Class", 2022)
-        intern.namePerson ="Little sally"
+        //intern.namePerson ="Little sally"
         return intern
     }
     fun personDNDWithJob(): PersonDNDIJob {
