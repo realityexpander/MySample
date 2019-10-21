@@ -1,11 +1,14 @@
-import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.Test
+
+import org.junit.jupiter.api.*
+import kotlin.test.assert
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 internal class LinkedListTest {
 
     private var ll = LinkedList<String>()
 
-    @org.junit.jupiter.api.BeforeEach
+    @BeforeEach
     fun setUp() {
         ll.append("John")
         ll.append("Carl")
@@ -16,31 +19,31 @@ internal class LinkedListTest {
         println(ll)
     }
 
-    @org.junit.jupiter.api.AfterEach
+    @AfterEach
     fun tearDown() {
         println("$ll")
         ll.removeAll()
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     fun insertAfterMatch() {
         ll.insertAfterMatch("Insert After Tim", "Tim")
         assert(ll.toString() == "[John, Carl, Zack, Tim, Insert After Tim, Steve, Peter]")
 
         assertTrue(ll.insertAfterMatch("Wont be inserted", "CantFindThisString") == null,
-                "failed to return null")
+                "failed to not insert item and return null")
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     fun insertBeforeMatch() {
         ll.insertBeforeMatch("Insert Before Tim", "Tim")
         assert(ll.toString() == "[John, Carl, Zack, Insert Before Tim, Tim, Steve, Peter]")
 
         assertTrue(ll.insertBeforeMatch("Wont be inserted", "CantFindThisString") == null,
-                "failed to return null")
+                "failed to not insert item and return null")
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     fun insertBeforeIndex() {
         ll.insertBeforeIndex("Insert before index 1", 1)
         assert(ll.toString() == "[John, Insert before index 1, Carl, Zack, Tim, Steve, Peter]")
@@ -49,7 +52,7 @@ internal class LinkedListTest {
         assert(ll.first()?.value == "Replace Head")
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     fun insertAfterIndex() {
         ll.insertAfterIndex("inserted after index 2", 2)
         assertTrue(ll.toString() == "[John, Carl, Zack, inserted after index 2, Tim, Steve, Peter]", "this is messed up")
@@ -66,7 +69,7 @@ internal class LinkedListTest {
                 "Failed to return null")
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     fun removeAtIndex() {
         ll.removeAtIndex(2)
         assert(ll.toString() == "[John, Carl, Tim, Steve, Peter]")
@@ -74,14 +77,14 @@ internal class LinkedListTest {
         assert(ll.removeAtIndex(20) == null)
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     fun removeNode() {
         val startCount = ll.count()
         ll.nodeAtIndex(0)?.let { ll.removeNode(it) }
         assert(ll.count() == startCount - 1)
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     fun count() {
 
         assert(ll.count() == 6)
@@ -92,7 +95,7 @@ internal class LinkedListTest {
 
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     fun first() {
         assert(ll.first()?.value == "John")
     }
@@ -143,12 +146,12 @@ internal class LinkedListTest {
         assertFalse(ll.contains("Missing Element"), "Should not contain Element")
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     fun last() {
         assert(ll.last()?.value == "Peter")
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     fun append() {
         ll.append("steve")
         assert(ll.count() == 7)

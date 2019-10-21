@@ -83,7 +83,7 @@ interface ICar  : IVehicle {
 //        println("<${this.javaClass.name}> init() ${this.toString()}")
 fun <T : AbstractPersonIName> setLoadingCompleted(localThis: T) {
     (localThis as T).setLoadingStatus("Loaded")
-    println("* <${(localThis as T).javaClass.name}> init() ${localThis.toString()}")
+    println("* <${(localThis as T)::class.simpleName}> init() ${localThis.toString()}")
 }
 
 data class Position(var name: String, var position: String)

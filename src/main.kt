@@ -58,9 +58,9 @@ private fun runLinkedListTesting() {
     println("\nthe list has ${ll.count()} items: $ll")
 }
 
-
-class UnskilledSwordJugglerException :
-        IllegalStateException("Player cannot juggle swords")
+//open class UnskilledSwordJugglerException : RuntimeException
+//typealias UnskilledSwordJugglerException = kotlin.RuntimeException
+//        IllegalStateException("Player cannot juggle swords")
 
 class Sword(_name: String) {
     var name = _name

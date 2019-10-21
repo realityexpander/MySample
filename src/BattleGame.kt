@@ -59,7 +59,7 @@ data class Goblin(override var lifePoints: Int = 50,
 
 data class Minsk(override var lifePoints: Int = 60
 ) : IWarrior {
-    override var nameFighter: String = this.javaClass.name
+    override var nameFighter: String = this::class.simpleName.toString()
     override val strength: Int = 15
 
     override fun attack(opponent: IFighter) {
@@ -82,7 +82,7 @@ data class Wizard(override var lifePoints: Int = 50,
 data class Artur(override var lifePoints: Int = 150,
                  override var manaPoints: Int = 10
 ) : IWarrior, ISorcerer {
-    override var nameFighter: String = this.javaClass.name
+    override var nameFighter: String = this::class.simpleName.toString()
     override var spell = Spell(4, 17, "Fireball")
     override val strength: Int = 5
 
@@ -118,7 +118,7 @@ abstract class AbstractTeacherISorcerer(teacher: Teacher
     }
 
     override fun toString(): String {
-        return this.javaClass.name +"(" +
+        return this::class.toString() +"(" +
                "lifePoints=$lifePoints, " +
                "manaPoints=$manaPoints, " +
                "spell=$spell, " + super.toString() + ")"
@@ -160,7 +160,7 @@ class TeacherIWarriorISorcerer(teacher: Teacher = Teacher()
     }
 
     override fun toString(): String {
-        return this.javaClass.name +"(" +
+        return this::class.simpleName +"(" +
                 "lifePoints=$lifePoints, " +
                 "manaPoints=$manaPoints, " +
                 "spell=$spell, " + super.toString() + ")"
