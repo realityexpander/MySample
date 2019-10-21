@@ -26,15 +26,15 @@ open class BaseClass {
 }
 
 class Subclass : BaseClass() {
-    // valPrivate not visible
-    // valProtectedOpen is visible, overrideable
-    // valProtected is visible, not overrideable due to default final
-    // valInternal is visible (same module)
-    // valPublic is visible
+    // valPrivate                  NOT visible
+    // valProtectedOpen            is visible, overrideable (not public)
+    // valProtected                is visible, not overrideable due to default final (not public)
+    // valInternal                 is visible (same module)
+    // valPublic                   is visible
     // valOuterNested.nestedPublic is visible
 
-    override val valProtectedOpen = 200 // ok to override a protected var if its declared open
-//  override val valProtected = 10 // Can't do this unless its declared open
+    override val valProtectedOpen = 200 // OK to override a protected var, only if its declared open
+//  override val valProtected = 10      // Can't override this unless its declared open
 
     override fun display() {
         println(("<Subclass>\nvalProtectedOpen=$valProtectedOpen, \n" +
@@ -46,13 +46,14 @@ class Subclass : BaseClass() {
 }
 
 class UnrelatedClass(o: BaseClass) {
-    // o.valPrivate not visible
-    // o.valProtected not visible
-    // o.valInternal is visible (same module)
-    // o.valPublic is visible
-    // o.valOuterNested not visible
-    // Outer.Nested not visible
-    // Nested::nestedPublic not visible
+    // o.valPrivate         NOT visible
+    // o.valProtected       NOT visible
+    // o.valProtectedOpen   NOT visible
+    // o.valInternal        is visible (same module only, outside module invisible)
+    // o.valPublic          is visible
+    // o.valOuterNested     NOT visible
+    // Outer.Nested         NOT visible
+    // Nested::nestedPublic NOT visible
 
     init {
         println("<UnrelatedClass>\no.valInternal=${o.valInternal}, \n" +

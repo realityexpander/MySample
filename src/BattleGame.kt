@@ -26,7 +26,6 @@ interface ISorcerer : ICharacter {
     var manaPoints: Int
 
     fun canCastSpell() = manaPoints > spell.manaCost
-
     fun castSpell(opponent: IFighter) {
         if (manaPoints < spell.manaCost) {
             println("$nameFighter tried to cast spell ${spell.name} but not enough mana...")
@@ -36,7 +35,6 @@ interface ISorcerer : ICharacter {
         manaPoints -= spell.manaCost
         opponent.lifePoints -= spell.strength
     }
-
     override fun turnEnd() {
         manaPoints += 1
     }
@@ -102,8 +100,7 @@ data class Artur(override var lifePoints: Int = 150,
 
 
 // Create abstract class extended from concrete class & interface
-abstract class AbstractTeacherISorcerer(teacher: Teacher
-) : Teacher(teacher.namePerson, // + "<AbstractTeacherISorcerer>",
+abstract class AbstractTeacherISorcerer(teacher: Teacher) : Teacher(teacher.namePerson, // + "<AbstractTeacherISorcerer>",
             teacher.ssn,
             teacher.job,
             teacher.payRate
@@ -126,6 +123,23 @@ abstract class AbstractTeacherISorcerer(teacher: Teacher
 
 }
 
+
+abstract class AbstractTeacherIWarrior(teacher: Teacher) : Teacher(teacher.namePerson,
+        teacher.ssn,
+        teacher.job,
+        teacher.payRate), IWarrior {
+    override var nameFighter: String = "Extreme ${teacher.namePerson} ${this::class.simpleName.toString()}"
+    override var strength: Int = 40
+
+    override fun attack(opponent: IFighter) {
+        println("The Teacher $namePerson SMACKS DOWN!")
+        meleeAttack(opponent)
+    }
+}
+
+class TeacherWarrior(teacher: Teacher) : AbstractTeacherIWarrior(teacher) {
+    override var lifePoints: Int = 50
+}
 
 // Extend from abstract class which extends from concrete class & interface
 class TeacherSorcerer(teacher: Teacher = Teacher()) : AbstractTeacherISorcerer(teacher) {
@@ -167,7 +181,11 @@ class TeacherIWarriorISorcerer(teacher: Teacher = Teacher()
     }
 }
 
-fun simulateCombat(c1: ICharacter, c2: ICharacter) {
+fun simulateCombat(args: Array<ICharacter> ) { // : ICharacter, c2: ICharacter) {
+
+    var c1 = args[0]
+    var c2 = args[1]
+
     println("\n***Fight Started***\n")
     while (c1.lifePoints > 0 && c2.lifePoints > 0) {
         c1.attack(c2)
@@ -191,13 +209,13 @@ fun mainBattleGame() {
 
     val teacher = Teacher("Ms. Mills", "123-56-7890", "Remedial Math", 10000)
     val teacherSorcerer = TeacherIWarriorISorcerer(teacher)
-    val teacherSorcerer2 = TeacherSorcerer(teacher)
+    val teacherSorcerer2 = TeacherWarrior(teacher)
     teacherSorcerer.setLoadingStatus("Loaded")
     teacherSorcerer2.setLoadingStatus("Loaded")
 
     println()
-    simulateCombat(teacherSorcerer2, teacherSorcerer)
-    simulateCombat(artur, teacherSorcerer)
+    simulateCombat(arrayOf(teacherSorcerer2, teacherSorcerer))
+    simulateCombat(arrayOf(artur, teacherSorcerer))
 
     println()
     teacherSorcerer.displayJob()

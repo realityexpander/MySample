@@ -4,8 +4,10 @@ interface IName {
     fun displayName() {
         println("<InterfaceName> displayName() $namePerson")
     }
+}
 
-//    abstract fun setName(s: String)
+interface ISex : IName {
+    abstract var sex: String
 }
 
 interface ISocSecNum : IName {
@@ -93,9 +95,20 @@ data class DNDStats(var valSTR: Int,
                     var valCHR: Int,
                     var valHP: Int )
 
+abstract class AbstractPersonISex(override var sex: String = "Male") : ISex {
+
+    init {
+        println("\n<AbstractPersonISex> init() ${this::class.simpleName} ${this.toString()}")
+    }
+
+    override fun toString(): String {
+        return ", sex=$sex, " + super.toString()
+    }
+}
+
 // Abstract classes for Person
 abstract class AbstractPersonIName(name: String
-) : IName {
+) : AbstractPersonISex() {
     override var namePerson: String = name // constructed here
         internal set
 
@@ -103,7 +116,7 @@ abstract class AbstractPersonIName(name: String
 
 
     init {
-        println("\n<AbstractPerson> init() ${this.toString()}}")
+        println("<AbstractPersonIName> init() ${this.toString()}}")
     }
 
     private fun getLoadingStatus(): String {
@@ -114,7 +127,7 @@ abstract class AbstractPersonIName(name: String
     }
 
     override fun toString(): String {
-        return "name=$namePerson, ${getLoadingStatus()}"
+        return "name=$namePerson, ${getLoadingStatus()}" + super.toString()
     }
 }
 
@@ -400,7 +413,10 @@ class PersonWithJobAndCar(name: String,
 }
 
 
-fun mainTeacherStudent() {
+fun mainTeacherStudentParent() {
+
+    println("\n*** Teachers & Students & Parents ***\n")
+
     fun teacher(): Teacher {
         val teach = Teacher("teach Ms. Mills", "123-56-7890", "Math Teacher", 10000)
         return teach
@@ -475,11 +491,11 @@ fun mainTeacherStudent() {
 //    personDND.displayJob()
 //    personDND.displayPosition()
 
-    teacher.displayJob()
+//    teacher.displayJob()
 //    teach.displaySSN()
 //    println("teach.dingDangIt=${teach.getDing()}")
 
-    student.displayChore()
+//    student.displayChore()
 //    student.displaySSN()
 //    student.displayChore()
 //    student.displayCar()
@@ -523,8 +539,8 @@ fun mainTeacherStudent() {
 //    personNamed.setName(foo)
 //    println(personNamed.toString())
 
-    println(internPerson.toString())
-    internPerson.displayGradYear()
-    internPerson.displayJob()
-    internPerson.displaySSN()
+//    println(internPerson.toString())
+//    internPerson.displayGradYear()
+//    internPerson.displayJob()
+//    internPerson.displaySSN()
 }

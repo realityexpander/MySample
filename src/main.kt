@@ -4,14 +4,14 @@ public var foo: String = "hello"
 
 fun main(args: Array<String>) {
 
-    mainBattleGame()
+//    mainBattleGame()
 //    println()
 
 //    mainPlayerSwordGame()
 //    println()
 
-//    mainTeacherStudent()
-    println()
+//    mainTeacherStudentParent()
+//    println()
 
 //    // Linked list implementation
 //    runLinkedListTesting()
@@ -19,8 +19,10 @@ fun main(args: Array<String>) {
 //    val list = addToList()
 //    println(list)
 
-
 //    runSort()
+
+    mainMammals()
+    println()
 
     println("\n\n")
 
