@@ -6,10 +6,12 @@ interface IFighter {
     fun turnEnd() {}
 
 }
+
 interface ICharacter : IFighter {
     val nameFighter: String
 //        get() = this.javaClass.name
 }
+
 interface IWarrior : ICharacter {
     val strength: Int
 
@@ -18,6 +20,7 @@ interface IWarrior : ICharacter {
         opponent.lifePoints -= strength
     }
 }
+
 interface ISorcerer : ICharacter {
     val spell: Spell
     var manaPoints: Int
@@ -45,14 +48,17 @@ data class Spell(
     var name: String = "Magic Missile" )
 
 data class Goblin(override var lifePoints: Int = 50,
-                  override var nameFighter: String = "Blue Goblin") : ICharacter {
+                  override var nameFighter: String = "Blue Goblin"
+) : ICharacter {
 
     override fun attack(opponent: IFighter) {
         println("$nameFighter attack (5)")
         opponent.lifePoints -= 5
     }
 }
-data class Minsk(override var lifePoints: Int = 60) : IWarrior {
+
+data class Minsk(override var lifePoints: Int = 60
+) : IWarrior {
     override var nameFighter: String = this.javaClass.name
     override val strength: Int = 15
 
@@ -60,10 +66,11 @@ data class Minsk(override var lifePoints: Int = 60) : IWarrior {
         meleeAttack(opponent)
     }
 }
+
 data class Wizard(override var lifePoints: Int = 50,
                   override val spell: Spell = Spell(),
                   override var manaPoints: Int = 20
-                 ) : ISorcerer {
+) : ISorcerer {
     override var nameFighter: String = "Gandalf"
 
     override fun attack(opponent: IFighter) {
@@ -71,6 +78,7 @@ data class Wizard(override var lifePoints: Int = 50,
         castSpell(opponent)
     }
 }
+
 data class Artur(override var lifePoints: Int = 150,
                  override var manaPoints: Int = 10
 ) : IWarrior, ISorcerer {
@@ -92,6 +100,8 @@ data class Artur(override var lifePoints: Int = 150,
     }
 }
 
+
+// Create abstract class extended from concrete class & interface
 abstract class AbstractTeacherISorcerer(teacher: Teacher
 ) : Teacher(teacher.namePerson, // + "<AbstractTeacherISorcerer>",
             teacher.ssn,
@@ -117,8 +127,9 @@ abstract class AbstractTeacherISorcerer(teacher: Teacher
 }
 
 
+// Extend from abstract class which extends from concrete class & interface
 class TeacherSorcerer(teacher: Teacher = Teacher()) : AbstractTeacherISorcerer(teacher) {
-    override var nameFighter: String = teacher.namePerson + "<${this.javaClass.name}>"
+    override var nameFighter: String = teacher.namePerson //+ "<${this.javaClass.name}>"
 
 
     init {
@@ -126,6 +137,7 @@ class TeacherSorcerer(teacher: Teacher = Teacher()) : AbstractTeacherISorcerer(t
     }
 }
 
+// Extend concrete class & use interfaces
 class TeacherIWarriorISorcerer(teacher: Teacher = Teacher()
 ) : Teacher(teacher.namePerson, teacher.ssn, teacher.job, teacher.payRate),
     IWarrior, ISorcerer {
@@ -133,7 +145,8 @@ class TeacherIWarriorISorcerer(teacher: Teacher = Teacher()
     override val strength: Int = 10
     override val spell: Spell = Spell(3, 7, "Final Exam")
     override var manaPoints: Int = 10
-    override val nameFighter: String = teacher.namePerson.reversed() + "<TeacherIWarriorISorcerer>"
+    override val nameFighter: String = teacher.namePerson
+            .reversed().toLowerCase().capitalize() // + "<${this.javaClass.name}>"
 
 
     init {
@@ -155,6 +168,7 @@ class TeacherIWarriorISorcerer(teacher: Teacher = Teacher()
 }
 
 fun simulateCombat(c1: ICharacter, c2: ICharacter) {
+    println("\n***Fight Started***\n")
     while (c1.lifePoints > 0 && c2.lifePoints > 0) {
         c1.attack(c2)
         c2.attack(c1)
@@ -165,8 +179,8 @@ fun simulateCombat(c1: ICharacter, c2: ICharacter) {
                 " ${c2.nameFighter} HP=${c2.lifePoints}")
     }
     val text = when {
-        c1.lifePoints > 0 -> "$c1 won, \n$c2 died."
-        c2.lifePoints > 0 -> "$c2 won, \n$c1 died."
+        c1.lifePoints > 0 -> "Winner=$c1\nLoser=$c2"
+        c2.lifePoints > 0 -> "Winner=$c2\nLoser=$c1"
         else -> "Both $c1 and $c2 are dead"
     }
     println(text)
@@ -183,7 +197,8 @@ fun mainBattleGame() {
 
     println()
     simulateCombat(teacherSorcerer2, teacherSorcerer)
-//    simulateCombat(artur, teacherSorcerer)
+    simulateCombat(artur, teacherSorcerer)
+
     println()
     teacherSorcerer.displayJob()
 //    simulateCombat(artur, Minsk())

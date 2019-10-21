@@ -1,4 +1,4 @@
-interface InterfaceName {
+interface IName {
     abstract val namePerson: String // var must be in scope of implementing class
 
     fun displayName() {
@@ -7,14 +7,16 @@ interface InterfaceName {
 
 //    abstract fun setName(s: String)
 }
-interface InterfaceSSN       : InterfaceName {
+
+interface ISocSecNum : IName {
     abstract var ssn: String // found in scope of implementing class
 
     fun displaySSN() {
         println("<InterfaceSSN> displaySSN() $namePerson's ssn=$ssn")
     }
 }
-interface InterfaceJob       : InterfaceSSN {
+
+interface IJob       : ISocSecNum {
     abstract var job: String // found in scope of the implementing class
 
     fun displayJob() {
@@ -25,30 +27,8 @@ interface InterfaceJob       : InterfaceSSN {
         job = "<InterfaceJob> quitJob() - Unemployed"
     }
 }
-interface InterfaceVehicle {
-    abstract val vehicleType: String// found in scope of the implementing class
-    abstract var numWheels: Int
 
-    fun displayVehicle(extraInfo: String) {
-        println("<InterfaceVehicle> displayVehicle() vehicle=$vehicleType numWheels=$numWheels extraInfo=$extraInfo")
-    }
-
-}
-interface InterfaceCar       : InterfaceVehicle {
-    abstract var displayCarCount: Int // found in scope of the implementing class
-    abstract val car: String          // found in scope of the implementing class
-
-    fun displayCar(message: String = "Default Car Message") {
-        displayCarCount += 1
-        println("<InterfaceCar> displayCar(message) car=$car, message=\"$message\", displayCarCount=$displayCarCount")
-    }
-    fun displayCar() {
-        displayVehicle(car)
-        displayCar("displayCarCount=$displayCarCount")
-        numWheels += 1
-    }
-}
-interface InterfaceJobAndCar : InterfaceJob, InterfaceCar {
+interface IJobAndCar : IJob, ICar {
     fun displayJobAndCarInit() : Boolean // Implementing Class must implement this fun signature
 
     fun displayJobAndCar(){ // Default Fun provided
@@ -57,7 +37,8 @@ interface InterfaceJobAndCar : InterfaceJob, InterfaceCar {
         println("<InterfaceJobAndCar> displayJobAndCar() ***** $namePerson's job/car/ssn=$job/$car/$ssn *****")
     }
 }
-interface InterfaceDNDStats  : InterfaceName {
+
+interface IDNDStats  : IName {
     abstract var stats: DNDStats
 
     fun displayDNDStats() {
@@ -72,6 +53,31 @@ interface InterfaceDNDStats  : InterfaceName {
     }
 }
 
+interface IVehicle {
+    abstract val vehicleType: String// found in scope of the implementing class
+    abstract var numWheels: Int
+
+    fun displayVehicle(extraInfo: String) {
+        println("<InterfaceVehicle> displayVehicle() vehicle=$vehicleType numWheels=$numWheels extraInfo=$extraInfo")
+    }
+
+}
+
+interface ICar  : IVehicle {
+    abstract var displayCarCount: Int // found in scope of the implementing class
+    abstract val car: String          // found in scope of the implementing class
+
+    fun displayCar(message: String = "Default Car Message") {
+        displayCarCount += 1
+        println("<InterfaceCar> displayCar(message) car=$car, message=\"$message\", displayCarCount=$displayCarCount")
+    }
+    fun displayCar() {
+        displayVehicle(car)
+        displayCar("displayCarCount=$displayCarCount")
+        numWheels += 1
+    }
+}
+
 // I can't believe i wrote this function
 //        this.setLoadingStatus("Loaded")
 //        println("<${this.javaClass.name}> init() ${this.toString()}")
@@ -81,23 +87,19 @@ fun <T : AbstractPersonIName> setLoadingCompleted(localThis: T) {
 }
 
 data class Position(var name: String, var position: String)
+
 data class DNDStats(var valSTR: Int,
                     var valDEX: Int,
                     var valCHR: Int,
                     var valHP: Int )
 
-abstract class AbstractPersonIName(override val namePerson: String) : InterfaceName {
-//    private var _name: String = name // constructed here
-//    val name: String // constructed here
-//        get() = _name
-//    internal fun setName(name: String) {
-//        _name = name
-//    }
+// Abstract classes for Person
+abstract class AbstractPersonIName(name: String
+) : IName {
+    override var namePerson: String = name // constructed here
+        internal set
 
-//    open var name: String = name
-//        internal set
-
-    private var loadingStatus: String = "Loading..." // Showing abstract class state
+    private var loadingStatus: String = "Loading..." // Showing abstract class internal state
 
 
     init {
@@ -117,12 +119,11 @@ abstract class AbstractPersonIName(override val namePerson: String) : InterfaceN
 }
 
 abstract class AbstractPersonIJob(name: String,
-                                  override var ssn: String,
-                                  override var job: String
-) : AbstractPersonIName(name), InterfaceJob {
+                                  override var ssn: String, // Constructed here
+                                  override var job: String  // Constructed here
+) : AbstractPersonIName(name), IJob {
 //    final override var ssn: String  // constructed here
 //    final override var job: String  // constructed here
-
     //    constructor(name: String, ssn: String, job: String) : this(name, ssn, job) {
 //        this.name ="$name ***"
 //    }
@@ -149,6 +150,8 @@ abstract class AbstractPersonIJob(name: String,
 
 }
 
+
+// Concrete Base Class for Person
 class Person(name: String) : AbstractPersonIName(name)
 
 open class PersonOld(name:String) {
@@ -170,13 +173,39 @@ open class PersonOld(name:String) {
 }
 
 
+// Created using only interfaces
+class PersonIJobViaInterfaces(override val namePerson: String,
+                              override var ssn: String,
+                              override var job: String
+) :  IJob {
 
+    init {
+        println("<PersonWithJobViaInterfaces> init() Person:$namePerson, job=$job, ssn=$ssn")
+    }
+
+    override fun toString(): String {
+        return "ssn=$ssn, job=$job, " + super.toString()
+    }
+}
+
+class StudentViaOnlyInterfaces(override val namePerson: String,
+                               override var ssn: String,
+                               override val car: String = "Unknown Car"
+) : ISocSecNum, ICar {
+    override var vehicleType: String = "Unknown Vehicle Type"
+    override var numWheels: Int = 4
+    override var displayCarCount: Int = 0
+
+}
+
+
+// Created using a mix of Abstract & interfaces
 class PersonDNDIJob(name: String, // InterfaceName
                     var position: Position,  // InterfaceDNDStats
                     override var stats: DNDStats,
                     override var ssn: String,  // InterfaceDNDStats
                     override var job: String  // InterfaceJob, var stats: DNDStats){}
-) :  AbstractPersonIName(name), InterfaceJob, InterfaceDNDStats {
+) :  AbstractPersonIName(name), IJob, IDNDStats {
 
     init {
         println("A New hero Enters: ${this.toString()}")
@@ -192,7 +221,7 @@ class Intern(name: String, // passed to the AbstractPerson constructor first
              override var ssn: String,
              override var job: String,
              private var gradYear: Int
-            ) : AbstractPersonIName(name), InterfaceJob {
+            ) : AbstractPersonIName(name), IJob {
     init {
         println("<Intern> init() name=$name, ssn=$ssn, gradYear=$gradYear")
     }
@@ -206,23 +235,13 @@ class Intern(name: String, // passed to the AbstractPerson constructor first
     }
 }
 
-class StudentViaOnlyInterfaces(override val namePerson: String,
-                               override var ssn: String,
-                               override val car: String = "Unknown Car"
-                           ) : InterfaceSSN, InterfaceCar {
-    override var vehicleType: String = "Unknown Vehicle Type"
-    override var numWheels: Int = 4
-    override var displayCarCount: Int = 0
-
-}
-
 class Student(name: String,
               override var ssn: String, // created for InterfaceSSN
               var gradeLevel: Int = 1,
               var chore: String = "NO CHORES ASSIGNED",
               override var car: String = "Ferrari", // created for InterfaceCar
               override var vehicleType: String  = "Unknown Vehicle"// created for InterfaceVehicle
-) : AbstractPersonIName(name), InterfaceCar, InterfaceSSN {
+) : AbstractPersonIName(name), ICar, ISocSecNum {
 
     override var displayCarCount: Int = 0
     override var numWheels: Int = 4
@@ -295,7 +314,7 @@ open class Teacher(name: String = "No name given",
 
 class Parent(name: String,
              job: String
-) : AbstractPersonIJob(name, job), InterfaceJobAndCar {
+) : AbstractPersonIJob(name, job), IJobAndCar {
     override val car: String = "Minivan" // for IDisplay Car
     override var displayCarCount: Int = 0 // for IDisplay Car
     override val vehicleType: String = "UNknown Vehicle Type"
@@ -340,24 +359,10 @@ class PersonIJobViaAbstractClass(name: String,
     }
 }
 
-class PersonIJobViaInterfaces(override val namePerson: String,
-                              override var ssn: String,
-                              override var job: String
-) :  InterfaceJob {
-
-    init {
-        println("<PersonWithJobViaInterfaces> init() Person:$namePerson, job=$job, ssn=$ssn")
-    }
-
-    override fun toString(): String {
-        return "ssn=$ssn, job=$job, " + super.toString()
-    }
-}
-
 class PersonICar(name: String,
                  override val car: String = "Unknown Car",
                  override val vehicleType: String = "Unknown Car"
-) : AbstractPersonIName(name), InterfaceCar {
+) : AbstractPersonIName(name), ICar {
 
     override var numWheels: Int = 4
     override var displayCarCount: Int = 0
@@ -376,7 +381,7 @@ class PersonWithJobAndCar(name: String,
                           override var job: String,
                           override val car: String = "Unknown Car",
                           override val vehicleType: String = "Unknown Car"
-                         ) : AbstractPersonIName(name), InterfaceJobAndCar {
+                         ) : AbstractPersonIName(name), IJobAndCar {
     override var numWheels: Int = 4
 
     override fun displayJobAndCarInit(): Boolean {
