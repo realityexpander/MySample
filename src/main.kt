@@ -21,7 +21,10 @@ fun main(args: Array<String>) {
 
 //    runSort()
 
-    mainMammals()
+//    mainMammals()
+//    println()
+
+    mainGenerics()
     println()
 
     println("\n\n")
