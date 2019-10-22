@@ -79,7 +79,7 @@ fun mainGenerics() {
         fun f(i: Int): R { throw Exception() } // OK, R is returned
     //  fun f(t: Int): Int { throw Exception() } // error, R cannot be parameter type, 'out' type only
     }
-    //                Rt=to                   Rf=from
+    //                Rt=to                 Rf=from
     val v1: Covariant<Base1>    = Covariant<Base1>()  // OK     Equal classes always work
 //  val v2: Covariant<Base2>    = Covariant<Base1>()  // Error  bc Rt is not superclass of Rf
     val v6: Covariant<Base1>    = Covariant<Base2>()  // OK     as Rt is superclass of Rf
@@ -124,7 +124,7 @@ fun mainGenerics() {
     class Covariant2<out R: Base2> {
         fun f(t: Int) : R { throw Exception() }
     }
-    //                 Rt=to                    Rf=from
+    //                 Rt=to                  Rf=from
     val z1: Covariant2<Base2>    = Covariant2<Base2>() // OK     Equal classes always work
     val z2: Covariant2<Base2>    = Covariant2<Base3>() // OK     as Rt is superclass of Rf
     val z4: Covariant2<Base2>    = Covariant2<Base4>() // OK     as Rt is superclass of Rf
@@ -171,7 +171,8 @@ fun mainGenerics() {
         fun f(t: T): R { throw Exception() } // OK, as R is returned
     //    fun f(t: R): T { throw Exception() } // error, bc R is in 'in' position, T is in 'out' position
     }
-    //  in T, out R : Base2  // input T is generic, output R is required to be a superclass of 'Base2'
+    //  Tt >= Tf, Rt <= Rf: Base2
+    //  <in T, out R : Base2>  // input T is generic, output R is required to be a superclass of 'Base2'
     //                   Tt=to  Rt=to                    Tf=from  Rf=from
 //  val w1: Crossvariant<Base2, Base2>    = Crossvariant<Base1,   Base1>() // Error  Rf Base1 is out of bounds
     val w2: Crossvariant<Base2, Base2>    = Crossvariant<Base1,   Base2>() // OK
@@ -202,6 +203,7 @@ fun mainGenerics() {
         fun f(t: T): R { throw Exception() } // OK, as R is returned
     //    fun f(t: R): T { throw Exception() } // error, bc R is in 'in/params' position, T is in 'out/return' position
     }
+    //  Tt >= Tf: Base2, Rt <= Rf
     // <in T: Base2, out R>  // input T required to be a subclass of 'Base2'
     //                    Tt=to  Rt=to                  Tf=from  Rf=from
 //  val v7: Crossvariant2<Base2, Base2> = Crossvariant2<Base1,   Base3>() // Error  Tf Base1 is out of bounds
