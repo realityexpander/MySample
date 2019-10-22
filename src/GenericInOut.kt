@@ -15,12 +15,12 @@ fun mainGenerics() {
         fun f(i: Int): T { throw Exception() } // OK
         fun f(t: T): Int { throw Exception() } // OK
     }
-    val i0: Invariant<Base1>   = Invariant<Base1>() // OK     Base1  -> Base1
+    val i0: Invariant<Base1>   = Invariant<Base1>() // OK     Base1 -> Base1
     val i1: Invariant<Base2>   = Invariant<Base2>() // OK     Base2 -> Base2
 //  val i2: Invariant<Base1>   = Invariant<Base2>() // Error  Cant mismatch types
 //  val i3: Invariant<Base2>   = Invariant<Base>()  // Error  Cant mismatch types
 
-    // **************
+    // ************
     // * <T: Base2> = Simple Generics w/ restriction bounds
     class Invariant2<T: Base2>  {
         fun f(i: Int): T { throw Exception() } // OK
@@ -28,8 +28,9 @@ fun mainGenerics() {
     }
 //  val i4: Invariant2<Base1>   = Invariant2<Base1>()   // Error  Base1 is not in bounds
     val i5: Invariant2<Base2>   = Invariant2<Base2>()   // OK     Base2 -> Base2
-//  val i6: Invariant2<Base>    = Invariant2<Base2>()   // Error  Base is not in bounds
-//  val i7: Invariant2<Base2>   = Invariant2<Base>()    // Error  Base is not in bounds
+    val j5: Invariant2<Base3>   = Invariant2<Base3>()   // OK     Base3 -> Base3
+//  val i6: Invariant2<Base1>   = Invariant2<Base2>()   // Error  Type mismatch
+//  val i7: Invariant2<Base2>   = Invariant2<Base1>()   // Error  Type mismatch
 
     // ********
     // * <IN T> == Contravariant, input only, can accept any generic class/type, or Subclass of it
@@ -41,7 +42,7 @@ fun mainGenerics() {
     //                    Tt=to                     Tf=from
     val n0: Contravariant<Base1>    = Contravariant<Base1>() // OK    Equal classes always work
     val n1: Contravariant<Base2>    = Contravariant<Base1>() // OK    as Tt is subclass of Tf
-//  val n3: Contravariant<Base>     = Contravariant<Base2>() // Error bc Tt is not subclass of Tf
+//  val n3: Contravariant<Base1>    = Contravariant<Base2>() // Error bc Tt is not subclass of Tf
     val n3: Contravariant<Base2>    = Contravariant<Base2>() // Ok    Equal classes always work
 
     val n2: Contravariant<Base3>    = Contravariant<Base1>() // OK    as Tt is subclass of Tf
@@ -51,7 +52,7 @@ fun mainGenerics() {
     val n8: Contravariant<Base4>    = Contravariant<Base3>() // OK    as Tt is subclass of Tf
 
 
-    // *****************
+    // ***************
     // * <IN T: Base2> == Contravariant, input only, restricted bounds to specific subclasses/subtypes
     // <in T: allowTypeOrSubtypeOfT>
     // 'in' must be a Subtype of generic param, and restricted to class and subclasses of Base2, like java <? extends T>
@@ -66,8 +67,8 @@ fun mainGenerics() {
 
     val o5: Contravariant2<Base4>    = Contravariant2<Base2>()  // OK     as Tt is subclass of Tf
     val o6: Contravariant2<Base4>    = Contravariant2<Base3>()  // OK     as Tt is subclass of Tf
-//  val o7: Contravariant2<Base>     = Contravariant2<Base2>()  // Error  bc Tt is not in bounds of <T: Base2>
-//  val o8: Contravariant2<Base2>    = Contravariant2<Base>()   // Error  bc Tf is not in bounds of <T: Base2>
+//  val o7: Contravariant2<Base1>    = Contravariant2<Base2>()  // Error  bc Tt is not in bounds of <T: Base2>
+//  val o8: Contravariant2<Base2>    = Contravariant2<Base1>()  // Error  bc Tf is not in bounds of <T: Base2>
 //  val o9: Contravariant2<Base2>    = Contravariant2<Base3>()  // Error  bc Tt is not a subclass of Tf
 
 
@@ -80,13 +81,13 @@ fun mainGenerics() {
     }
     //                Rt=to                   Rf=from
     val v1: Covariant<Base1>    = Covariant<Base1>()  // OK     Equal classes always work
-//  val v2: Covariant<Base2>    = Covariant<Base>()   // Error  bc Rt is not superclass of Rf
+//  val v2: Covariant<Base2>    = Covariant<Base1>()  // Error  bc Rt is not superclass of Rf
     val v6: Covariant<Base1>    = Covariant<Base2>()  // OK     as Rt is superclass of Rf
     val v2: Covariant<Base2>    = Covariant<Base2>()  // OK     Equal classes always work
 
     val v3: Covariant<Base2>    = Covariant<Base3>()  // OK     as Rt is superclass of Rf
-//  val v4: Covariant<Base2>    = Covariant<Base>()   // Error  bc Rt is not superclass of Rf
-//  val v5: Covariant<Base3>    = Covariant<Base>()   // Error  bc Rt is not superclass of Rf
+//  val v4: Covariant<Base2>    = Covariant<Base1>()  // Error  bc Rt is not superclass of Rf
+//  val v5: Covariant<Base3>    = Covariant<Base1>()  // Error  bc Rt is not superclass of Rf
 
 
 //    class Covary<in T:Base3, R>(var x: R) {
@@ -115,7 +116,7 @@ fun mainGenerics() {
     println(aa.get(0).toString())
 
 
-    // ******************
+    // ****************
     // * <OUT R: Base2>
     // <out R: requiredTypeOrSuperTypeOfR>
     // 'out' must be a Supertype of generic param, restricted bounds to class and superclass/type of Base2
@@ -162,7 +163,7 @@ fun mainGenerics() {
     val r8: Crossvariant3<Base3,  Base1> = Crossvariant3<Base2,  Base2>() // OK    Tt subclass Tf, Rt is superclass of Rf
 
 
-    // ************************
+    // **********************
     // * <IN T, OUT R: Base2>
     // 'in' are input parameter types, 'out' are for return types
     // <in T, out R : onlyTypeOrSubtypeOfR>  // note: T alone means onlyTypeOrSupertype of T
@@ -194,7 +195,7 @@ fun mainGenerics() {
 //  val e7: Crossvariant<Base2, Base2>    = Crossvariant<Base2,   Base1>() // Error  Rf Base1 is out of bounds
 
 
-    // ************************
+    // **********************
     // * <IN T: Base2, OUT R>
     // <in T: onlyTypeOrSubtypeOfT, out R:onlyTypeOrSupertypeOfR>
     class Crossvariant2<in T: Base2, out R: Base2 > {
