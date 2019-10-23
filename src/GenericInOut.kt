@@ -1,11 +1,41 @@
 // https://stackoverflow.com/questions/36155108/kotlin-generics-in-kfunction1
 import kotlin.Exception
 
-open class Base1 {var a: Int = 0}
-open class Base2: Base1() {var b: Int = 1}
-open class Base3: Base2() {var c: Int = 2}
-open class Base4: Base3() {var d: Int = 3}
-open class Base5: Base4() {var e: Int = 4}
+open class Base1(var a: Int = 0) {
+    override fun toString(): String {
+        return super.toString() + ",a=${a}"
+    }
+}
+open class Base2(a: Int = 0,
+                 var b: Int = 1) : Base1(a) {
+    override fun toString(): String {
+        return super.toString() + ",b=${b}"
+    }
+}
+open class Base3(a: Int = 0,
+                 b: Int = 1,
+                 var c: Int = 2) : Base2(a, b) {
+    override fun toString(): String {
+        return super.toString() + ",c=${c}"
+    }
+}
+open class Base4(a: Int = 0,
+                 b: Int = 1,
+                 c: Int = 2,
+                 var d: Int = 3) : Base3(a, b, c) {
+    override fun toString(): String {
+        return super.toString() + ",d=${d}"
+    }
+}
+open class Base5(a: Int = 0,
+                 b: Int = 1,
+                 c: Int = 2,
+                 d: Int = 3,
+                 var e: Int = 4) : Base4(a, b, c, d) {
+    override fun toString(): String {
+        return super.toString() + ",e=${e}"
+    }
+}
 
 fun mainGenerics() {
 
@@ -59,7 +89,7 @@ fun mainGenerics() {
     class Contravariant2<in T: Base2> {
         fun f(t: T) : Int { throw Exception() }
     }
-    //                     Tt=to                           Tf=from
+    //                     Tt=to                      Tf=from
     val o2: Contravariant2<Base2>    = Contravariant2<Base2>()  // OK     Equal classes always work
     val p4: Contravariant2<Base3>    = Contravariant2<Base2>()  // OK     as Tt is subclass of Tf
 //  val o4: Contravariant2<Base2>    = Contravariant2<Base3>()  // Error  as Tt is not subclass of Tf
@@ -90,30 +120,56 @@ fun mainGenerics() {
 //  val v5: Covariant<Base3>    = Covariant<Base1>()  // Error  bc Rt is not superclass of Rf
 
 
-//    class Covary<in T:Base3, R>(var x: R) {
-//        fun f(i: Int): R {return x as R}
-//
-//        fun f(e: T) {x = e as R}
-//    }
 
-    class Covary<in T:Base2, R>(var y: R) {
-        fun get(i: Int): R { println("get() ${this.toString()}"); return y }
-        fun set(e:T) { println("set() ${this.toString()}"); y=e as R }
-        inline fun <reified R> get(e: T): R {
-            return if(e is R) e as R else y as R
+//                            12345+       12345+   12345+
+    class CovaryInternal<in T:Base1, out R:Base5, I:Base1>(var internal1: I?) {
+        var internal2: I?
+
+        init{ internal2 = internal1 }
+
+
+        fun set(e: T): I {
+            internal2 = e as I
+            println("set() ${internal2.toString()}")
+            return e
+        }
+        fun getterI(i: Int): I {
+            println("getterI() ${internal2.toString()}")
+            return internal2 as I
+        }
+        inline fun <reified J> getterRi(): J {
+            println("getRi() ${internal2.toString()}")
+            return internal2 as J
+        }
+        fun getterR(): R {
+            println("getR() ${internal2.toString()}")
+            // if not valid return type, make a new object to return copied from on the internal2 var
+            internal2?.run {
+                return when (javaClass.simpleName) {
+                    "Base1" -> Base5(a) as R
+                    "Base2" -> Base5(a, (this as Base2).b ) as R
+                    "Base3" -> Base5(a, (this as Base3).b, (this as Base3).c) as R
+                    "Base4" -> Base5(a, (this as Base4).b,
+                                    (this as Base4).c, (this as Base4).d) as R
+                    else -> internal2 as R
+                }
+            }
+
+            return internal2 as R // probably null
         }
 
         override fun toString(): String {
-            return (y as T).run {
-                "a=${a}, b=${b}, " +
-                /*c=${c},*/ "${this.javaClass.simpleName}, " + super.toString()}
+            return "CovaryInternal internal2=${internal2.toString()}, " + super.toString()
         }
     }
-    val aa = Covary<Base2, Base2>(Base2())
-//    aa.f(Base2())
-    var x = aa.get(0)
-    aa.set(Base3()) // Set a new Base2
-    println(aa.get(0).toString())
+
+    val aa = CovaryInternal<Base1, Base5, Base1>(null)
+    aa.set(Base1())
+    aa.set(Base2())
+    aa.set(Base3())
+    aa.set(Base4())
+    aa.set(Base5())
+    println(aa.getterRi<Base5>())
 
 
     // ****************
@@ -209,7 +265,7 @@ fun mainGenerics() {
 //  val v7: Crossvariant2<Base2, Base2> = Crossvariant2<Base1,   Base3>() // Error  Tf Base1 is out of bounds
     val v8: Crossvariant2<Base2, Base2> = Crossvariant2<Base2,   Base3>() // OK     Rt is superclass of Rf
     val q1: Crossvariant2<Base3, Base2> = Crossvariant2<Base2,   Base3>() // OK     Tt is subclass of Tf
-    val q0: Crossvariant2<Base3, Base1> = Crossvariant2<Base2,   Base3>() // Error  Rt Base1 is out of bounds
+//  val q0: Crossvariant2<Base3, Base1> = Crossvariant2<Base2,   Base3>() // Error  Rt Base1 is out of bounds
 //  val q2: Crossvariant2<Base4, Base1> = Crossvariant2<Base3,   Base1>() // Error  Rf Base1 is out of bounds
     val q2: Crossvariant2<Base4, Base2> = Crossvariant2<Base3,   Base3>() // OK     Tt is subclass of Tf, Rt is superclass of Rf
 
