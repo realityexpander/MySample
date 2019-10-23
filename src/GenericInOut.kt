@@ -112,14 +112,14 @@ fun mainGenerics() {
 
 
 //                                    12345+       xxx45+   12345+
-    class CrossvariantWithInternal<in T:Base1, out R:Base4, I:Base2>(internal: I) {
+    class CrossvariantWithInternal<T:Base3, out R:Base2, I:Base2>() {
 
-        var internal: I = Base2() as I
+        lateinit var internal: T // Must match T Type
 
-        fun set(e: T): I {
-            internal = e as I
+        fun set(e: T): R {
+            internal = e as T // Must match T type
             println("set() ${internal.toString()}")
-            return e
+            return e as R
         }
         fun getterI(i: Int): I {
             println("getterI() ${internal.toString()}")
@@ -130,14 +130,18 @@ fun mainGenerics() {
             return internal as J
         }
         fun getterR(): R {
-            println("getR() ${internal.toString()}")
-            // Promotes/Upcasts the return class from I to R, 'BaseN(...)' below *must* match R
+            return internal as R
+        }
+        fun getterRUp(): R {
+            println("getRUp() ${internal.toString()}")
+            // Promotes/Upcasts the return class from I to R, 'BaseN(...)' below *must* match R to Upcast properly
             internal.run {
                 return when (this) {
-                    is Base1 -> Base4(a) as R
-                    is Base2 -> Base4(a, (this as Base2).b ) as R
-                    is Base3 -> Base4(a, (this as Base3).b, (this as Base3).c) as R
+                    is Base5 -> internal as R
                     is Base4 -> Base5(a, (this as Base4).b, (this as Base4).c, (this as Base4).d) as R
+                    is Base3 -> Base4(a, (this as Base3).b, (this as Base3).c) as R
+                    is Base2 -> Base3(a, (this as Base2).b ) as R
+                    is Base1 -> Base2(a) as R
                     else -> internal as R
                 }
             }
@@ -148,12 +152,12 @@ fun mainGenerics() {
         }
     }
 
-    val aa = CrossvariantWithInternal<Base1, Base4, Base2>( Base2() )
+    val aa = CrossvariantWithInternal<Base3, Base2, Base2>( )
 //    aa.set(Base1())
-    aa.set(Base2())
+//    aa.set(Base2())
+//    aa.set(Base3())
+//    aa.set(Base4())
     aa.set(Base3())
-    aa.set(Base4())
-    aa.set(Base5())
     println(aa.getterRi<Base5>())
 
 
