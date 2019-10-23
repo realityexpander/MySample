@@ -259,11 +259,10 @@ class Student(name: String,
     override var displayCarCount: Int = 0
     override var numWheels: Int = 4
 
-    constructor(name: String, ssn: String, gradeLevel: Int
-                ): this(name, ssn, gradeLevel,
-                        "NO CHORES ASSIGNED",
-                        "NO CAR ASSIGNED",
-                        "NO VEHICLE ASSIGNED"
+    constructor(name: String, ssn: String, gradeLevel: Int): this(name, ssn, gradeLevel,
+                                                                "NO CHORES ASSIGNED",
+                                                                "NO CAR ASSIGNED",
+                                                                "NO VEHICLE ASSIGNED"
             ) {
         println("<Student> CONSTRUCTOR ${this.namePerson}")
     }

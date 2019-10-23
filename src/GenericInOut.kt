@@ -6,32 +6,22 @@ open class Base1(var a: Int = 0) {
         return super.toString() + ",a=${a}"
     }
 }
-open class Base2(a: Int = 0,
-                 var b: Int = 1) : Base1(a) {
+open class Base2(a: Int = 0, var b: Int = 1) : Base1(a) {
     override fun toString(): String {
         return super.toString() + ",b=${b}"
     }
 }
-open class Base3(a: Int = 0,
-                 b: Int = 1,
-                 var c: Int = 2) : Base2(a, b) {
+open class Base3(a: Int = 0, b: Int = 1, var c: Int = 2) : Base2(a, b) {
     override fun toString(): String {
         return super.toString() + ",c=${c}"
     }
 }
-open class Base4(a: Int = 0,
-                 b: Int = 1,
-                 c: Int = 2,
-                 var d: Int = 3) : Base3(a, b, c) {
+open class Base4(a: Int = 0, b: Int = 1, c: Int = 2, var d: Int = 3) : Base3(a, b, c) {
     override fun toString(): String {
         return super.toString() + ",d=${d}"
     }
 }
-open class Base5(a: Int = 0,
-                 b: Int = 1,
-                 c: Int = 2,
-                 d: Int = 3,
-                 var e: Int = 4) : Base4(a, b, c, d) {
+open class Base5(a: Int = 0, b: Int = 1, c: Int = 2, d: Int = 3, var e: Int = 4) : Base4(a, b, c, d) {
     override fun toString(): String {
         return super.toString() + ",e=${e}"
     }
@@ -121,50 +111,45 @@ fun mainGenerics() {
 
 
 
-//                            12345+       12345+   12345+
-    class CovaryInternal<in T:Base1, out R:Base5, I:Base1>(var internal1: I?) {
-        var internal2: I?
+//                                    12345+       xxx45+   12345+
+    class CrossvariantWithInternal<in T:Base1, out R:Base4, I:Base2>(internal: I) {
 
-        init{ internal2 = internal1 }
-
+        var internal: I = Base2() as I
 
         fun set(e: T): I {
-            internal2 = e as I
-            println("set() ${internal2.toString()}")
+            internal = e as I
+            println("set() ${internal.toString()}")
             return e
         }
         fun getterI(i: Int): I {
-            println("getterI() ${internal2.toString()}")
-            return internal2 as I
+            println("getterI() ${internal.toString()}")
+            return internal as I
         }
         inline fun <reified J> getterRi(): J {
-            println("getRi() ${internal2.toString()}")
-            return internal2 as J
+            println("getRi() ${internal.toString()}")
+            return internal as J
         }
         fun getterR(): R {
-            println("getR() ${internal2.toString()}")
-            // if not valid return type, make a new object to return copied from on the internal2 var
-            internal2?.run {
-                return when (javaClass.simpleName) {
-                    "Base1" -> Base5(a) as R
-                    "Base2" -> Base5(a, (this as Base2).b ) as R
-                    "Base3" -> Base5(a, (this as Base3).b, (this as Base3).c) as R
-                    "Base4" -> Base5(a, (this as Base4).b,
-                                    (this as Base4).c, (this as Base4).d) as R
-                    else -> internal2 as R
+            println("getR() ${internal.toString()}")
+            // Promotes/Upcasts the return class from I to R, 'BaseN(...)' below *must* match R
+            internal.run {
+                return when (this) {
+                    is Base1 -> Base4(a) as R
+                    is Base2 -> Base4(a, (this as Base2).b ) as R
+                    is Base3 -> Base4(a, (this as Base3).b, (this as Base3).c) as R
+                    is Base4 -> Base5(a, (this as Base4).b, (this as Base4).c, (this as Base4).d) as R
+                    else -> internal as R
                 }
             }
-
-            return internal2 as R // probably null
         }
 
         override fun toString(): String {
-            return "CovaryInternal internal2=${internal2.toString()}, " + super.toString()
+            return "CovaryInternal internal2=${internal.toString()}, " + super.toString()
         }
     }
 
-    val aa = CovaryInternal<Base1, Base5, Base1>(null)
-    aa.set(Base1())
+    val aa = CrossvariantWithInternal<Base1, Base4, Base2>( Base2() )
+//    aa.set(Base1())
     aa.set(Base2())
     aa.set(Base3())
     aa.set(Base4())
