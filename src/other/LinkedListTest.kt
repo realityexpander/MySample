@@ -1,3 +1,4 @@
+package other
 
 import org.junit.jupiter.api.*
 import kotlin.test.assertFalse

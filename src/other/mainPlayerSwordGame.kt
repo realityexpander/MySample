@@ -1,3 +1,8 @@
+package other
+
+import Sword
+import UnskilledSwordJugglerDescriptionException
+
 fun mainPlayerSwordGame() {
 
 //    var bev = readLine() // wait for keybd input

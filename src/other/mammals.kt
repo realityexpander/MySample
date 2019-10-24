@@ -1,9 +1,11 @@
+package other
+
 ////from https://medium.com/kotlin-thursdays/introduction-to-kotlin-generics-part-2-9428963bb96b
 //
 //import kotlin.random.*
 //import kotlin.reflect.*
 //
-//sealed class Mammal(val name: String) {
+//sealed class other.Mammal(val name: String) {
 //    fun eat() {}
 //    fun sleep() {}
 //    fun swim(){
@@ -15,7 +17,7 @@
 //
 //data class Sloth(val slothName: String,
 //                 val isTwoFingered: Boolean,
-//                 var slothWeight: Int): Mammal(slothName) {
+//                 var slothWeight: Int): other.Mammal(slothName) {
 //    override fun relief() {
 //        val oldWeight = slothWeight
 //        val weightShed = Random.nextInt(0, slothWeight/3)
@@ -30,9 +32,9 @@
 //
 //}
 //
-//data class Manatee(val manateeName: String): Mammal(manateeName)
+//data class Manatee(val manateeName: String): other.Mammal(manateeName)
 //
-//data class Panda(val pandaName: String) : Mammal(pandaName)
+//data class Panda(val pandaName: String) : other.Mammal(pandaName)
 //
 //// Unit means we're passing in Kotlin a block function w/ no inputs/outputs
 //fun slothActivity(sloth: Sloth, action: Unit) {
@@ -41,7 +43,7 @@
 //    }
 //}
 //
-//fun Mammal.vertebraeCount(): Int {
+//fun other.Mammal.vertebraeCount(): Int {
 //    return when (this) {
 //        is Manatee -> 6
 //        is Sloth -> 10
@@ -49,7 +51,7 @@
 //    }
 //}
 //
-//fun Mammal.knownSpeciesCount(): Int {
+//fun other.Mammal.knownSpeciesCount(): Int {
 //    return when (this) {
 //        is Panda -> 2
 //        is Manatee -> 3
@@ -58,7 +60,7 @@
 //    }
 //}
 //
-//fun Mammal.isEndangered(): Boolean {
+//fun other.Mammal.isEndangered(): Boolean {
 //    return when (this) {
 //        is Panda -> true
 //        is Manatee -> false // upgraded to "threatened"
@@ -67,7 +69,7 @@
 //    }
 //}
 //
-//fun mammalFactCheck(mammal: Mammal, factCheck: KFunction1<Mammal, Int>): Int {
+//fun mammalFactCheck(mammal: other.Mammal, factCheck: KFunction1<other.Mammal, Int>): Int {
 //    println("$mammal = ${factCheck(mammal)}")
 //    return factCheck(mammal)
 //}
@@ -86,7 +88,7 @@
 ////        slothActivity(it, it.relief())
 //
 //    slothCrew.forEach {
-//        mammalFactCheck(it, Mammal::vertebraeCount)
-//        mammalFactCheck(it, Mammal::knownSpeciesCount)
+//        mammalFactCheck(it, other.Mammal::vertebraeCount)
+//        mammalFactCheck(it, other.Mammal::knownSpeciesCount)
 //    }
 //}

@@ -1,3 +1,5 @@
+package other
+
 open class BaseClass {
     private val valPrivate = 1
     protected open val valProtectedOpen = 2
@@ -37,7 +39,7 @@ class Subclass : BaseClass() {
 //  override val valProtected = 10      // Can't override this unless its declared open
 
     override fun display() {
-        println(("<Subclass>\nvalProtectedOpen=$valProtectedOpen, \n" +
+        println(("<other.Subclass>\nvalProtectedOpen=$valProtectedOpen, \n" +
                 "valProtected=$valProtected, \n" +
                 "valInternal=$valInternal, \n" +
                 "valPublic=$valPublic, \n" +
@@ -56,7 +58,7 @@ class UnrelatedClass(o: BaseClass) {
     // Nested::nestedPublic NOT visible
 
     init {
-        println("<UnrelatedClass>\no.valInternal=${o.valInternal}, \n" +
+        println("<other.UnrelatedClass>\no.valInternal=${o.valInternal}, \n" +
                             "o.valPublic=${o.valPublic}" )
     }
 

@@ -1,15 +1,17 @@
+package other
+
 //// Saving state in interfaces - Not Approved
 //// https://blog.kotlin-academy.com/abstract-class-vs-interface-in-kotlin-5ab8697c3a14
 //interface AnimalInterface {
 //    var name: String
 //        get() = names[this] ?: "Default name"
-//        set(value) { names[this] = value
+//        other.set(value) { names[this] = value
 //            refs++
 //        }
 //
 //    var type: String
 //        get() = types[this] ?: "Default type"
-//        set(value) { types[this] = value
+//        other.set(value) { types[this] = value
 //            refs++
 //        }
 //
@@ -26,7 +28,7 @@
 //}
 //
 //class Fox: AnimalInterface
-//class Dog: AnimalInterface
+//class other.Dog: AnimalInterface
 //
 //fun main0(args: Array<String>) {
 //    val fox = Fox()
@@ -35,11 +37,11 @@
 //
 //    println(fox.fullName) // Sox of type Tibetan sand fox
 //
-//    val dog = Dog()
+//    val dog = other.Dog()
 //    dog.name = "Billy"
-//    dog.type = "Dog"
+//    dog.type = "other.Dog"
 //
-//    println(dog.fullName) // Billy of type Dog
+//    println(dog.fullName) // Billy of type other.Dog
 //
 //    println()
 //}
@@ -71,8 +73,8 @@
 //
 //    val dog = DogViaAbstract()
 //    dog.name = "Billy"
-//    dog.type = "Dog"
+//    dog.type = "other.Dog"
 //
 //    println(fox.fullName) // Sox of type Tibetan sand fox
-//    println(dog.fullName) // Billy of type Dog
+//    println(dog.fullName) // Billy of type other.Dog
 //}

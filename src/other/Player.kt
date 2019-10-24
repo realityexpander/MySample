@@ -1,3 +1,5 @@
+package other
+
 class Player {
     var name = "sample"
 

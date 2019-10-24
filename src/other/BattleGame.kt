@@ -1,3 +1,5 @@
+package other
+
 // From https://blog.kotlin-academy.com/inheritance-composition-delegation-and-traits-b11c64f11b27
 
 interface IFighter {
@@ -46,7 +48,7 @@ data class Spell(
     var name: String = "Magic Missile" )
 
 data class Goblin(override var lifePoints: Int = 50,
-                  override var nameFighter: String = "Blue Goblin"
+                  override var nameFighter: String = "Blue other.Goblin"
 ) : ICharacter {
 
     override fun attack(opponent: IFighter) {
@@ -100,7 +102,7 @@ data class Artur(override var lifePoints: Int = 150,
 
 
 // Create abstract class extended from concrete class & interface
-abstract class AbstractTeacherISorcerer(teacher: Teacher) : Teacher(teacher.namePerson, // + "<AbstractTeacherISorcerer>",
+abstract class AbstractTeacherISorcerer(teacher: Teacher) : Teacher(teacher.namePerson, // + "<other.AbstractTeacherISorcerer>",
             teacher.ssn,
             teacher.job,
             teacher.payRate
@@ -110,7 +112,7 @@ abstract class AbstractTeacherISorcerer(teacher: Teacher) : Teacher(teacher.name
     override val spell: Spell = Spell(5, 5, "Pop Quiz")
 
     override fun attack(opponent: IFighter) {
-        println("The Teacher $namePerson assigns [${spell.name}] (${spell.strength})")
+        println("The other.Teacher $namePerson assigns [${spell.name}] (${spell.strength})")
         castSpell(opponent)
     }
 
@@ -132,7 +134,7 @@ abstract class AbstractTeacherIWarrior(teacher: Teacher) : Teacher(teacher.nameP
     override var strength: Int = 40
 
     override fun attack(opponent: IFighter) {
-        println("The Teacher $namePerson SMACKS DOWN!")
+        println("The other.Teacher $namePerson SMACKS DOWN!")
         meleeAttack(opponent)
     }
 }
@@ -154,7 +156,7 @@ class TeacherSorcerer(teacher: Teacher = Teacher()) : AbstractTeacherISorcerer(t
 // Extend concrete class & use interfaces
 class TeacherIWarriorISorcerer(teacher: Teacher = Teacher()
 ) : Teacher(teacher.namePerson, teacher.ssn, teacher.job, teacher.payRate),
-    IWarrior, ISorcerer {
+        IWarrior, ISorcerer {
     override var lifePoints: Int = 40
     override val strength: Int = 10
     override val spell: Spell = Spell(3, 7, "Final Exam")
@@ -181,7 +183,7 @@ class TeacherIWarriorISorcerer(teacher: Teacher = Teacher()
     }
 }
 
-fun simulateCombat(args: Array<ICharacter> ) { // : ICharacter, c2: ICharacter) {
+fun simulateCombat(args: Array<ICharacter> ) { // : other.ICharacter, c2: other.ICharacter) {
 
     var c1 = args[0]
     var c2 = args[1]
@@ -219,7 +221,7 @@ fun mainBattleGame() {
 
     println()
     teacherSorcerer.displayJob()
-//    simulateCombat(artur, Minsk())
-//    simulateCombat(artur, Goblin())
-//    simulateCombat(artur, Wizard())
+//    other.simulateCombat(artur, other.Minsk())
+//    other.simulateCombat(artur, other.Goblin())
+//    other.simulateCombat(artur, other.Wizard())
 }

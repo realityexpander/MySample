@@ -1,7 +1,12 @@
+package other
+
+import ILinkedList
+import LinkedList
+
 class CountingList<T>(
         private val newThis: MutableSet<T> = mutableSetOf<T>()
 ): MutableSet<T> by newThis {
-    //    val set = HashSet<T>()
+    //    val other.set = HashSet<T>()
     var addCount = 0
         private set
 
@@ -40,7 +45,7 @@ class CountingLinkedList<T>(
 
 
 fun main4( args: Array<String>) {
-//    val list = CountingList<String>()
+//    val list = other.CountingList<String>()
     val list = CountingLinkedList<String>()
 //    val list = LinkedList<String>()
 

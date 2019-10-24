@@ -1,3 +1,5 @@
+package other
+
 interface IName {
     abstract val namePerson: String // var must be in scope of implementing class
 
@@ -98,7 +100,7 @@ data class DNDStats(var valSTR: Int,
 abstract class AbstractPersonISex(override var sex: String = "Male") : ISex {
 
     init {
-        println("\n<AbstractPersonISex> init() ${this::class.simpleName} ${this.toString()}")
+        println("\n<other.AbstractPersonISex> init() ${this::class.simpleName} ${this.toString()}")
     }
 
     override fun toString(): String {
@@ -106,7 +108,7 @@ abstract class AbstractPersonISex(override var sex: String = "Male") : ISex {
     }
 }
 
-// Abstract classes for Person
+// Abstract classes for other.Person
 abstract class AbstractPersonIName(name: String
 ) : AbstractPersonISex() {
     override var namePerson: String = name // constructed here
@@ -116,7 +118,7 @@ abstract class AbstractPersonIName(name: String
 
 
     init {
-        println("<AbstractPersonIName> init() ${this.toString()}}")
+        println("<other.AbstractPersonIName> init() ${this.toString()}}")
     }
 
     private fun getLoadingStatus(): String {
@@ -164,7 +166,7 @@ abstract class AbstractPersonIJob(name: String,
 }
 
 
-// Concrete Base Class for Person
+// Concrete Base Class for other.Person
 class Person(name: String) : AbstractPersonIName(name)
 
 open class PersonOld(name:String) {
@@ -177,7 +179,7 @@ open class PersonOld(name:String) {
     }
 
     init {
-        println("\n<Person> init() name=$name.")
+        println("\n<other.Person> init() name=$name.")
     }
 
     override fun toString(): String {
@@ -190,10 +192,10 @@ open class PersonOld(name:String) {
 class PersonIJobViaInterfaces(override val namePerson: String,
                               override var ssn: String,
                               override var job: String
-) :  IJob {
+) : IJob {
 
     init {
-        println("<PersonWithJobViaInterfaces> init() Person:$namePerson, job=$job, ssn=$ssn")
+        println("<PersonWithJobViaInterfaces> init() other.Person:$namePerson, job=$job, ssn=$ssn")
     }
 
     override fun toString(): String {
@@ -217,7 +219,7 @@ class PersonDNDIJob(name: String, // InterfaceName
                     var position: Position,  // InterfaceDNDStats
                     override var stats: DNDStats,
                     override var ssn: String,  // InterfaceDNDStats
-                    override var job: String  // InterfaceJob, var stats: DNDStats){}
+                    override var job: String  // InterfaceJob, var stats: other.DNDStats){}
 ) :  AbstractPersonIName(name), IJob, IDNDStats {
 
     init {
@@ -225,7 +227,7 @@ class PersonDNDIJob(name: String, // InterfaceName
     }
 
     fun displayPosition() {
-        println("Position for $namePerson: ${position.name}@${position.position}")
+        println("other.Position for $namePerson: ${position.name}@${position.position}")
     }
 
 }
@@ -236,11 +238,11 @@ class Intern(name: String, // passed to the AbstractPerson constructor first
              private var gradYear: Int
             ) : AbstractPersonIName(name), IJob {
     init {
-        println("<Intern> init() name=$name, ssn=$ssn, gradYear=$gradYear")
+        println("<other.Intern> init() name=$name, ssn=$ssn, gradYear=$gradYear")
     }
 
     fun displayGradYear() {
-        println("<Intern> displayGradYear() ${this.toString()}")
+        println("<other.Intern> displayGradYear() ${this.toString()}")
     }
 
     override fun toString(): String {
@@ -264,15 +266,15 @@ class Student(name: String,
                                                                 "NO CAR ASSIGNED",
                                                                 "NO VEHICLE ASSIGNED"
             ) {
-        println("<Student> CONSTRUCTOR ${this.namePerson}")
+        println("<other.Student> CONSTRUCTOR ${this.namePerson}")
     }
 
     init{
-        println("<Student> init() student: $name in grade $gradeLevel ")
+        println("<other.Student> init() student: $name in grade $gradeLevel ")
     }
 
     override fun displaySSN() {
-        println("<Student> $namePerson's SSN is scrambled ${
+        println("<other.Student> $namePerson's SSN is scrambled ${
                 ssn.toString()
                 .toCharArray()
                 .map{c: Char -> c+20 }
@@ -282,39 +284,39 @@ class Student(name: String,
     }
 
     fun displayChore() {
-        println("<Student> $namePerson has chore $chore is in grade $gradeLevel")
+        println("<other.Student> $namePerson has chore $chore is in grade $gradeLevel")
     }
 
 //    override fun displayCar() {
 ////        super.displayCar(this.car) // call interface method
-//        println("<Student> displayCar() $name's car is a $car, x=$x")
+//        println("<other.Student> displayCar() $name's car is a $car, x=$x")
 //    }
 
 }
 
 open class Teacher(name: String = "No name given",
                    ssn: String = "No ssn given",
-                   job: String = "Substitute Teacher",
+                   job: String = "Substitute other.Teacher",
                    val payRate: Int = 100
              ) : AbstractPersonIJob(name, ssn, job) {
 
     init{
-        println("<Teacher> init() ${this.toString()}")
+        println("<other.Teacher> init() ${this.toString()}")
     }
 
 //    override fun displayJob() {
 ////        super.displayJob()
-//        println("<Teacher> displayJob() $name has Job:$job ssn=$ssn, pay=$$payRate")
+//        println("<other.Teacher> displayJob() $name has Job:$job ssn=$ssn, pay=$$payRate")
 //    }
 
     override fun quitJob() {
-        println("<Teacher> Called quitJob()")
+        println("<other.Teacher> Called quitJob()")
         super.quitJob()
     }
 
     fun teachStudent(student: Student) {
         student.gradeLevel++
-        println("Student ${student.namePerson} is now grade ${student.gradeLevel}")
+        println("other.Student ${student.namePerson} is now grade ${student.gradeLevel}")
         student.chore = "Head of ${student.chore}"
     }
 
@@ -333,11 +335,11 @@ class Parent(name: String,
     override var numWheels: Int = 4
 
     init{
-        println("<Parent> init() Parent: $name and job is $job")
+        println("<other.Parent> init() other.Parent: $name and job is $job")
     }
 
     override fun displayJobAndCarInit(): Boolean {
-        println("<Parent> displayJobAndCarInit() called")
+        println("<other.Parent> displayJobAndCarInit() called")
         return true
     }
 
@@ -348,7 +350,7 @@ class Parent(name: String,
 //        //println("IDisplayJobAndCar Route")
 //        super<IDisplayJobAndCar>.displayJob()
 //
-//        //println("<Parent> $name has Job: $job, ssn=$ssn")
+//        //println("<other.Parent> $name has Job: $job, ssn=$ssn")
 //    }
 
 }
@@ -403,7 +405,7 @@ class PersonWithJobAndCar(name: String,
     override var displayCarCount: Int = 0
 
     init {
-        println("<PersonWithJobAndCar> init() PersonWithJobAndCar: $name")
+        println("<other.PersonWithJobAndCar> init() other.PersonWithJobAndCar: $name")
     }
 
     override fun toString(): String {
@@ -417,7 +419,7 @@ fun mainTeacherStudentParent() {
     println("\n*** Teachers & Students & Parents ***\n")
 
     fun teacher(): Teacher {
-        val teach = Teacher("teach Ms. Mills", "123-56-7890", "Math Teacher", 10000)
+        val teach = Teacher("teach Ms. Mills", "123-56-7890", "Math other.Teacher", 10000)
         return teach
     }
     fun student2(): Student {
