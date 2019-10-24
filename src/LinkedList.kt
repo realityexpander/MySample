@@ -1,6 +1,6 @@
-class Node<T>(var value: T,
-    var next: Node<T>? = null,
-    var previous: Node<T>? = null )
+class Node<T>(var value:    T,
+              var next:     Node<T>? = null,
+              var previous: Node<T>? = null )
 
 
 enum class NodeInsertionMode { INSERT_BEFORE_NODE, INSERT_AFTER_NODE }
