@@ -3,8 +3,16 @@ package variance
 
 fun mainContravariance() {
 
-    open class A
-    open class B : A()
+    open class A() {
+        var a: Int = 1
+
+        constructor(a: Int) : this() {
+            this.a = 99
+        }
+    }
+    open class B : A() {
+        var b: Int = 2
+    }
 
     class Box<in T> { // drop-box only accepts type T or subtype
         private val items = mutableListOf<T>()
@@ -25,50 +33,66 @@ fun mainContravariance() {
 
     // using contravariance
     val boxOfA: Box<A> = Box<A>()
-    val boxOfB: Box<B> = Box<A>()
     val boxOfBPtrToBoxOfA: Box<B> = boxOfA
+    val boxOfB: Box<B> = Box<A>()
 
-    open class Super {
+    open class AExecutor {
         //open fun execute(arg: B) {}
+
+        // This will *not* accept A
         open val execute: (B) -> Unit = {
-            println("Super execute() (B) -> Unit")
-        }
-
-//        fun execute(a: A) {
-//            println("Super execute(a: A)")
-//        }
-    }
-
-    class Sub : Super() {
-        //override fun execute(arg: A) {}
-        override val execute: (A) -> Unit = {
-            println("Sub execute() (A) -> Unit")
+            println("AExecutor execute (B) -> Unit")
+            println("b=${it.b}")
         }
 
 //        fun execute(b: B) {
-//            println("Sub execute(b: B)")
+//            println("AExecutor execute(b: B)")
+//            println("b=${b.b}")
 //        }
     }
 
-    println("With Sub()")
-    with (Sub()) {
-        execute(A())        // "Sub execute() (A) -> Unit"
-        execute(B())        // "Sub execute() (A) -> Unit"
-        execute((B() as A)) // "Sub execute() (A) -> Unit"
-//      execute((A() as B)) // compiles, but get type cast error at runtime
+    class BExecutor : AExecutor() {
+        //override fun execute(arg: A) {}
+
+        // This will also accept B, bc B a subclass of A
+        override val execute: (A) -> Unit = {
+            println("BExecutor execute (A) -> Unit")
+            println("a=${it.a}")
+
+            if(it is B) {
+                println("(A) is really B, b=${it.b}")
+                super.execute(it as B)
+            }
+        }
+
+//        fun execute(a: A) {
+//            println("BExecutor execute(a: A)")
+//            println("a=${a.a}")
+//        }
     }
 
     println()
-    println("With Super()")
-    with (Super()) {
-//      execute(A())        // Compiler Error, "Required B found A."
-        execute(B())        // "Super execute() (B) -> Unit"
+    println("With Super AExecutor -> B")
+    with (AExecutor()) {
+//      execute(A())        // Compiler Error, "Required B found A."         // lambda     fun
+        execute(B())        // AExecutor execute(b: B)                          AExec      AExec
 //      execute((B() as A)) // Compiler Error, "Required B found A."
 //      execute((A() as B)) // compiles, but get type cast error at runtime
     }
 
     println()
-    println()
+
+    println("With Sub BExecutor -> A")
+    with (BExecutor()) {                                                     // lambda     fun
+        execute(A())        // BExecutor execute(b: B)                          BExec      BExec
+        execute(B())        // AExecutor execute(b: B)                          BExec      AExec <- ???
+        execute((B() as A)) // BExecutor execute(b: B)                          BExec      BExec
+//      execute((A() as B)) // compiles, but get type cast error at runtime
+    }
+
+
+//    println()
+//    println()
 
 //    update(boxOfB, B())
 //    update(boxOfA, A())
