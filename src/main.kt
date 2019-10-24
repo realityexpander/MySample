@@ -24,7 +24,10 @@ fun main(args: Array<String>) {
 //    mainMammals()
 //    println()
 
-    mainGenerics()
+//    mainGenerics()
+//    println()
+
+    mainTypeProjections()
     println()
 
     println("\n\n")
