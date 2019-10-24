@@ -5,26 +5,86 @@ open class Base1(var a: Int = 0) {
     override fun toString(): String {
         return super.toString() + ",a=${a}"
     }
+
+    // ==
+    override fun equals(other: Any?): Boolean {
+        return if(other is Base1)
+            a == other.a //&& super.equals(other)
+        else
+            return false
+    }
+
+//    fun equals(other: Base1): Boolean { // Will use more specific Base type if other type is known
+//        return a == other.a // top of chain, so no super.equals()
+//    }
 }
 open class Base2(a: Int = 0, var b: Int = 1) : Base1(a) {
     override fun toString(): String {
         return super.toString() + ",b=${b}"
     }
+
+    // ==
+    override fun equals(other: Any?): Boolean {
+        return if(other is Base2)
+            b == other.b && super.equals(other)
+        else
+            super.equals(other)
+    }
+
+//    fun equals(other: Base2): Boolean {
+//        return b == other.b && super.equals(other)
+//    }
 }
 open class Base3(a: Int = 0, b: Int = 1, var c: Int = 2) : Base2(a, b) {
     override fun toString(): String {
         return super.toString() + ",c=${c}"
     }
+
+    // ==
+    override fun equals(other: Any?): Boolean {
+        return if(other is Base3)
+            c == other.c && super.equals(other)
+        else
+            super.equals(other)
+    }
+
+//    fun equals(other: Base3): Boolean {
+//        return c == other.c && super.equals(other)
+//    }
 }
 open class Base4(a: Int = 0, b: Int = 1, c: Int = 2, var d: Int = 3) : Base3(a, b, c) {
     override fun toString(): String {
         return super.toString() + ",d=${d}"
     }
+
+    // ==
+    override fun equals(other: Any?): Boolean {
+        return if(other is Base4)
+            d == other.d && super.equals(other)
+        else
+            super.equals(other)
+    }
+
+//    fun equals(other: Base4): Boolean {
+//        return d == other.d && super.equals(other)
+//    }
 }
 open class Base5(a: Int = 0, b: Int = 1, c: Int = 2, d: Int = 3, var e: Int = 4) : Base4(a, b, c, d) {
     override fun toString(): String {
         return super.toString() + ",e=${e}"
     }
+
+    // == operator
+    override fun equals(other: Any?): Boolean {
+        return if(other is Base5)
+            e == other.e && super.equals(other)
+        else
+            super.equals(other)
+    }
+
+//    fun equals(other: Base5): Boolean {
+//        return e == other.e && super.equals(other)
+//    }
 }
 
 fun mainGenerics() {
@@ -111,44 +171,46 @@ fun mainGenerics() {
 
 
 
-//                                    12345+       xxx45+   12345+
+//                                   xx345+       x2345+   x2345+
     class CrossvariantWithInternal<T:Base3, out R:Base2, I:Base2>() {
 
-        lateinit var internal: T // Must match T Type
+        lateinit var internalStore: T // Must match T Type
 
         fun set(e: T): R {
-            internal = e as T // Must match T type
-            println("set() ${internal.toString()}")
+            internalStore = e as T
+            println("set() ${internalStore.toString()}")
             return e as R
         }
         fun getterI(i: Int): I {
-            println("getterI() ${internal.toString()}")
-            return internal as I
+            println("getterI() ${internalStore.toString()}")
+            return internalStore as I
         }
         inline fun <reified J> getterRi(): J {
-            println("getRi() ${internal.toString()}")
-            return internal as J
+            println("getRi() ${internalStore.toString()}")
+            return internalStore as J
         }
         fun getterR(): R {
-            return internal as R
+            println("getterR() ${internalStore.toString()}")
+//            return Base2(internalStore.a, internalStore.b) as R
+            return internalStore as R
         }
         fun getterRUp(): R {
-            println("getRUp() ${internal.toString()}")
-            // Promotes/Upcasts the return class from I to R, 'BaseN(...)' below *must* match R to Upcast properly
-            internal.run {
+            println("getterRUp() ${internalStore.toString()}")
+            // Promotes/Up-casts the return class from I to R, 'BaseN(...)' below *must* match R to Upcast properly
+            internalStore.run {
                 return when (this) {
-                    is Base5 -> internal as R
+                    is Base5 -> internalStore as R
                     is Base4 -> Base5(a, (this as Base4).b, (this as Base4).c, (this as Base4).d) as R
                     is Base3 -> Base4(a, (this as Base3).b, (this as Base3).c) as R
                     is Base2 -> Base3(a, (this as Base2).b ) as R
                     is Base1 -> Base2(a) as R
-                    else -> internal as R
+                    else -> internalStore as R
                 }
             }
         }
 
         override fun toString(): String {
-            return "CovaryInternal internal2=${internal.toString()}, " + super.toString()
+            return "CovaryInternal internal2=${internalStore.toString()}, " + super.toString()
         }
     }
 
@@ -157,8 +219,18 @@ fun mainGenerics() {
 //    aa.set(Base2())
 //    aa.set(Base3())
 //    aa.set(Base4())
-    aa.set(Base3())
-    println(aa.getterRi<Base5>())
+    aa.set(Base3(99, 99, 55))
+    var base1: Base1 = Base1(99)
+    var base2: Base2 = Base2(99, 99)
+    var base3: Base3 = Base3(99, 99)
+    var base4: Base4 = Base5(99, 50, 99)
+    var base5: Base5 = Base5(99, 99, 99)
+
+//    println(base2.equals(base5))
+//    println(base3.equals(base5))
+//    println(base4.equals(base5))
+    println("base5 == base4 => ${base5 == base4}")
+//    println(aa.getterRi<Base5>())
 
 
     // ****************
