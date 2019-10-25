@@ -7,17 +7,49 @@ fun mainContravariance() {
         var a: Int = 1
 
         constructor(a: Int) : this() {
-            this.a = 99
+            this.a = a
         }
+
+//        fun copy(a: Int = this.a) = A(a)
     }
-    open class B : A() {
+    open class B() : A() {
         var b: Int = 2
+
+        constructor(a: Int = 2, b: Int = 3) : this() {
+            this.a = a
+            this.b = b
+        }
+
+//        // .copy(...) As a method doesn't work bc inheritance selects for most specific declaration.
+//        //   so doing .copy(b=12) on a C type will run the B copy and return a new B object, not a C object.
+//        fun copy(a: Int = this.a, b: Int = this.b) = B(a, b)
     }
-    open class C : B() {
+    open class C() : B() {
         var c: Int = 3
+
+        constructor(a: Int = 4, b: Int = 5, c: Int = 6) : this() {
+            this.a = a
+            this.b = b
+            this.c = c
+        }
+
+//        // .copy(...) as a lambda (doesnt work bc we cant use named params, all params must be given from caller)
+//        open val copy: (Int, Int, Int) -> C = { a, b, c -> C(a+1, b, c) }
+
+//        // .copy(...) As a method doesn't work bc inheritance selects for most specific declaration.
+//        //   so doing .copy(b=12) on a C type will run the B .copy method and return a new B object, not a C object.
+//        fun copy(a: Int = this.a, b: Int = this.b) = B(a, b)
+
     }
 
-    class Box<T:A, out R:List<T>>(val e: T) { // drop-box only accepts type T or subtype
+    // Must do .copy() as extension function in order to use default params (getting original values with {this})
+    fun A.copy(a: Int = this.a): A  = A(a)
+    fun B.copy(a: Int = this.a, b: Int = this.b): B = B(a, b)
+    fun C.copy(a: Int = this.a, b: Int = this.b, c: Int = this.c): C = C(a, b, c)
+
+    // *******************
+    // Covariant with inheritance
+    class Box<T:A, out R:List<T>>(val e: T) {
         private val _items = mutableListOf<T>(e)
         val items: R
             get() = _items as R
@@ -35,6 +67,25 @@ fun mainContravariance() {
 
     }
 
+    // using contravariance with inheritance
+//    val boxOfA: Box<A, List<A>> = Box(C())
+//    val boxOfBPtrToBoxOfA: Box<B, List<B>> = boxOfA
+//    val boxOfB: Box<B> = Box<A>()
+//    val boxOfC: Box<C> = Box<C>()
+
+//    update(boxOfB, B())
+//    update(boxOfA, A())
+//    boxOfBPtrToBoxOfA.update(B())
+//    boxOfA.deposit(B())
+//    boxOfA.insert(B())
+
+//    boxOfB.update(A()) // Compiler Error, "Type mismatch: inferred type is A but B was expected"
+//    boxOfB.deposit(A())
+//    boxOfB.insert(B())
+
+//    boxOfC.deposit(B())
+//    boxOfC.insert(C())
+
 //    class Box2<T, out R:List<T>>(val e:T) {
 //        private val _items = mutableListOf<T>(e)
 //
@@ -42,6 +93,35 @@ fun mainContravariance() {
 //            get() = _items as R
 //    }
 
+
+
+    // ***********************
+    // Contravariant strict
+    class Box3<in T:A> {
+        private val items = mutableListOf<T>()
+        fun showItems() {
+            println("b=${items.map{ (it as T).a }.joinToString()}") // unchecked cast will barf A->C
+            println("types= ${items.joinToString { "${it.javaClass.simpleName.split("$")[1]}->a=${(it as T).a}" } }")
+        }
+        fun insert(elem:T) {
+            items.add(elem)
+        }
+    }
+//    val a = Box3<A>()
+//    a.insert(A())
+//    a.insert(B().copy(a=200))
+//    a.showItems()
+//
+//    val b: Box3<B> = a
+////  b.insert(A()) // compiler error, type mismatch Required B, found A.
+//    b.insert(B().copy(a=99))
+//    b.insert(C().copy(a=98))
+//    b.showItems()
+
+
+
+    // ************************
+    // Experiments with variance, call chaining
 //    fun <T:A> readA(box: Box<T, List<T>>) {
     fun <T:A> readA(box: Box<T, List<T>>) {
         println("readA() list=${ box.items.joinToString{ "a=${it.a.toString()}" } }" )
@@ -57,14 +137,17 @@ fun mainContravariance() {
         readB(box as Box<B, List<B>>)
     }
 
-    val box2: Box<A, List<A>> = Box(A())
-    val box3: Box<C, List<C>> = Box(C())
+    val box2: Box<B, List<B>> = Box(B())
+    var box3: Box<C, List<C>> = Box(C())
     box3.deposit(C())
     box3.deposit(C())
-//    readA(box2)
-//    readFirstB(box2)
-//    readB(box3)
 
+    readA(box2)
+    println()
+    readB(box3)
+
+    // **************
+    // Experiments with inheritance
     fun <T:A> readDeep(box: Box<T, List<T>>) {
         readA(box)
     }
@@ -74,33 +157,29 @@ fun mainContravariance() {
     fun <T:C> readDeep(box: Box<T, List<T>>) {
         readC(box)
     }
-
-    readDeep(box3)
-
+//    readDeep(box3)
 
 
 
-//    // using contravariance
-//    val boxOfA: Box<A> = Box<A>()
-//    val boxOfBPtrToBoxOfA: Box<B> = boxOfA
-//    val boxOfB: Box<B> = Box<A>()
-//    val boxOfC: Box<C> = Box<C>()
-//
-////    update(boxOfB, B())
-////    update(boxOfA, A())
-////    boxOfBPtrToBoxOfA.update(B())
-//    boxOfA.deposit(B())
-//    boxOfA.insert(B())
-//
-////    boxOfB.update(A()) // Compiler Error, "Type mismatch: inferred type is A but B was expected"
-////    boxOfB.deposit(A())
-//    boxOfB.insert(B())
-//
-////    boxOfC.deposit(B())
-//    boxOfC.insert(C())
+    // ***********
+    // Experiments with default params and inheritance using .copy
+    var a1 = A()
+    var a2 = a1.copy(99)
+    var b1 = B()
+    var b2 = b1.copy(b=23)
+//    var c2 = c1.copy(a=988, b=989, c=999)
+    var c1 = C()
+    var c2 = c1.copy(a=105)
+    c2 = c2.copy(c=98)
+//    c2 = c2.copy(b=99)
+//    println("c2=${c2.a}, ${c2.b}, ${c2.c}")
+
+
+
 
     println()
 
+    // Experiments with Contravariance and call chaining, using lambdas as properties
     open class AExecutor {
 //        open fun execute(b: B) {
 //            println("AExecutor execute(b: B) b=${b.b}")
