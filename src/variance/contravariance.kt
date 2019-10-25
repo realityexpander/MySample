@@ -39,43 +39,56 @@ fun mainContravariance() {
     open class AExecutor {
         //open fun execute(arg: B) {}
 
-        // This will *not* accept A
-        open val execute: (B) -> Unit = {
-            println("AExecutor execute (B) -> Unit")
-            println("b=${it.b}")
-        }
+//        // This will *not* accept A // lambda
+//        open val execute: (B) -> Unit = {
+//            println("AExecutor execute (B) -> Unit")
+//            println("b=${it.b}")
+//        }
 
+//        // Only accept type: B  // fun1
 //        fun execute(b: B) {
 //            println("AExecutor execute(b: B)")
 //            println("b=${b.b}")
 //        }
+
+        open fun <T : B> execute(b: T) { // fun2
+            println("AExecutor execute(b: <T:B>) b=${b.b}")
+        }
     }
 
     class BExecutor : AExecutor() {
         //override fun execute(arg: A) {}
 
-        // This will also accept B, bc B a subclass of A
-        override val execute: (A) -> Unit = {
-            println("BExecutor execute (A) -> Unit")
-            println("a=${it.a}")
+//        // This will also accept B, bc B a subclass of A // lambda
+//        override val execute: (A) -> Unit = {
+//            println("BExecutor execute (A) -> Unit")
+//            println("a=${it.a}")
+//
+//            if(it is B) {
+//                println("(A) is really type B, b=${it.b}")
+//                super.execute(it as B)
+//            }
+//        }
 
-            if(it is B) {
-                println("(A) is really B, b=${it.b}")
-                super.execute(it as B)
-            }
+        // Only Accept type A // fun1
+        fun execute(a: A) {
+            println("BExecutor execute(a: A) a=${a.a}")
         }
 
-//        fun execute(a: A) {
-//            println("BExecutor execute(a: A)")
-//            println("a=${a.a}")
-//        }
+        // Only accept type B or subtype
+        override fun <T : B> execute(b: T) {  // fun2
+//        fun execute(b: B) {  // fun2
+            println("* BExecutor B -> AExecutor super.execute ")
+            super.execute(b)
+        }
     }
 
     println()
     println("With Super AExecutor -> B")
     with (AExecutor()) {
-//      execute(A())        // Compiler Error, "Required B found A."         // lambda     fun
-        execute(B())        // AExecutor execute(b: B)                          AExec      AExec
+//                          // Expected result                               // lambda     fun1          fun2
+//      execute(A())        // Compiler Error, "Required B found A."         // lambda     fun1          fun2
+//        execute(B())        // AExecutor execute(b: B)                          AExec      AExec         AExec
 //      execute((B() as A)) // Compiler Error, "Required B found A."
 //      execute((A() as B)) // compiles, but get type cast error at runtime
     }
@@ -83,10 +96,11 @@ fun mainContravariance() {
     println()
 
     println("With Sub BExecutor -> A")
-    with (BExecutor()) {                                                     // lambda     fun
-        execute(A())        // BExecutor execute(b: B)                          BExec      BExec
-        execute(B())        // AExecutor execute(b: B)                          BExec      AExec <- ???
-        execute((B() as A)) // BExecutor execute(b: B)                          BExec      BExec
+    with (BExecutor()) {
+//                          // Expected result                               // lambda     fun1          fun2
+//        execute(A())        // BExecutor execute(b: B)                          BExec      BExec         BExec
+        execute(B())        // BExecutor execute(b: B)                          BExec      AExec <-???-> AExec
+//        execute((B() as A)) // BExecutor execute(b: B)                          BExec      BExec         BExec
 //      execute((A() as B)) // compiles, but get type cast error at runtime
     }
 
@@ -94,11 +108,11 @@ fun mainContravariance() {
 //    println()
 //    println()
 
-//    update(boxOfB, B())
-//    update(boxOfA, A())
-    boxOfBPtrToBoxOfA.update(B())
-    boxOfA.update(A())
-//    boxOfB.update(A()) // Compiler Error, "Type mismatch: inferred type is A but B was expected"
-    boxOfB.update(B())
+////    update(boxOfB, B())
+////    update(boxOfA, A())
+//    boxOfBPtrToBoxOfA.update(B())
+//    boxOfA.update(A())
+////    boxOfB.update(A()) // Compiler Error, "Type mismatch: inferred type is A but B was expected"
+//    boxOfB.update(B())
 
 }
