@@ -1,12 +1,13 @@
 package other
+
 class Box<T>(var item: T)
 
 open class Animal( var sex: String = "Species Default" ) {
     open fun describe() = println("  describe() <other.Animal>=${this.sex}")
 }
 
-open class Mammal( var species: String = "other.Mammal Default") : Animal("Sex Unknown") {
-    override fun describe() = println("  describe() <other.Mammal>=${this.species}")
+open class Mammal( var species: String = "Mammal Default") : Animal("Sex Unknown") {
+    override fun describe() = println("  describe() <mammals.Mammal>=${this.species}")
 }
 
 open class Dog( var kind: String = "Kind Default") : Mammal("Canine") {
@@ -46,13 +47,13 @@ fun <T : Animal> set(boxed: Box<in T>, item: T) {
     println("<T : other.Animal> other.set(${item.sex})")
 }
 
-//fun other.set(boxed: other.Box<in other.Mammal>, item: other.Mammal) {
+//fun other.set(boxed: other.Box<in mammals.Mammal>, item: mammals.Mammal) {
 //    boxed.item = item
-//    println("<in other.Mammal> other.set(${item.species}, ${item.sex})")
+//    println("<in mammals.Mammal> other.set(${item.species}, ${item.sex})")
 //}
 fun <T : Mammal> set(boxed: Box<in T>, item: T) {
     boxed.item = item
-    println("<T : other.Mammal> other.set(${item.sex}, ${item.species})")
+    println("<T : mammals.Mammal> other.set(${item.sex}, ${item.species})")
 }
 
 //// Automatically select the most specific for "in"
@@ -105,12 +106,12 @@ fun mainTypeProjections() {
     set(dogBox, Dog("Kind Cocker Spaniel"))
     set(kittenBox, Kitten("Toy lil ball x2"))
 
-    set(animalBox, Mammal("other.Mammal species"))
+    set(animalBox, Mammal("Mammal species"))
 //    other.set(mammalBox, other.Animal("Test")) // not allowed
     set(mammalBox, Cat("Fido"))
-//    other.set(catBox, other.Mammal("some mammal") ) // not allowed
+//    other.set(catBox, mammals.Mammal("some mammal") ) // not allowed
     set(mammalBox, Kitten("Fluffy"))
-//    other.set(kittenBox, other.Mammal("some mammal")) // not allowed
+//    other.set(kittenBox, mammals.Mammal("some mammal")) // not allowed
 
     println()
 

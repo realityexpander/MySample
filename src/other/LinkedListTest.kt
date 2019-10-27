@@ -1,5 +1,7 @@
 package other
 
+import LinkedList
+import Node
 import org.junit.jupiter.api.*
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue

@@ -1,3 +1,4 @@
+import mammals.mainMammals
 import variance.mainContravariance
 
 public var foo: String = "hello"
@@ -21,8 +22,8 @@ fun main(args: Array<String>) {
 
 //    runSort()
 
-//    mainMammals()
-//    println()
+    mainMammals()
+    println()
 
 //    other.mainGenerics()
 //    println()
@@ -30,8 +31,8 @@ fun main(args: Array<String>) {
 //    other.mainTypeProjections()
 //    println()
 
-    mainContravariance()
-    println()
+//    mainContravariance()
+//    println()
 
     println("\n\n")
 
@@ -69,18 +70,3 @@ fun main(args: Array<String>) {
 //    println("\nthe list has ${ll.count()} items: $ll")
 //}
 //
-//class UnskilledSwordJugglerDescriptionException : RuntimeException("other.Player cannot juggle swords")
-//typealias UnskilledSwordJugglerException = kotlin.RuntimeException
-////        IllegalStateException("other.Player cannot juggle swords")
-//
-//class Sword(_name: String) {
-//    var name = _name
-//        get() = "The legendary $field"
-//        set(value) {
-//            field = value.toLowerCase().reversed().capitalize()
-//        }
-//
-//    init {
-//        name = _name
-//    }
-//}

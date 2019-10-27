@@ -1,7 +1,22 @@
 package other
 
-import Sword
-import UnskilledSwordJugglerDescriptionException
+
+class UnskilledSwordJugglerDescriptionException : RuntimeException("other.Player cannot juggle swords")
+typealias UnskilledSwordJugglerException = kotlin.RuntimeException
+//        IllegalStateException("other.Player cannot juggle swords")
+
+class Sword(_name: String) {
+    var name = _name
+        get() = "The legendary $field"
+        set(value) {
+            field = value.toLowerCase().reversed().capitalize()
+        }
+
+    init {
+        name = _name
+    }
+}
+
 
 fun mainPlayerSwordGame() {
 
