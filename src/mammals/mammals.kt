@@ -13,6 +13,7 @@ sealed class Mammal(val name: String) {
     }
     open fun relief() {}
     open fun action() { eat(); swim (); sleep() }
+    var weight = 10
 }
 
 
@@ -23,6 +24,7 @@ class Sloth(val slothName: String,
 
     override fun relief() {
         val oldWeight = slothWeight
+        weight = slothWeight
         val weightShed = Random.nextInt(0, slothWeight/3)
         val newWeight = slothWeight - weightShed
         println("${slothName.toUpperCase()} FINALLY WENT THIS WEEK")
@@ -45,7 +47,14 @@ data class Manatee(val manateeName: String): Mammal(manateeName) {
 data class Panda(val pandaName: String) : Mammal(pandaName) {
     override fun eat() {
         super.eat()
-        println("pandaName = ${pandaName} eats shoots")
+        println("pandaName = $pandaName eats shoots")
+    }
+}
+
+data class Tiger(val tigerName: String) : Mammal(tigerName) {
+    override fun eat() {
+        super.eat()
+        println("tigerName = $tigerName eats shoots")
     }
 }
 
@@ -74,7 +83,8 @@ fun Mammal.knownSpeciesCount(i:Int): Int {
         is Panda -> 2
         is Manatee -> 3
         is Sloth -> 6
-        else -> 100
+        is Tiger -> 2000
+//        else -> 100
     }
 }
 
@@ -93,13 +103,28 @@ fun mammalFactCheck(mammal: Mammal, factCheck: (Mammal, Int)->Int ): Int {
     return factCheck(mammal, 5)
 }
 
+inline fun <reified T: Mammal> printAnimalResultFiltered(
+        list: List<Mammal>,
+        factCheck: Mammal.(Int) -> Int  ) {
+    if (list.isNotEmpty()) {
+        list.filterIsInstance<T>()
+                .forEach {
+                    println("${it.javaClass.name} - ${it.factCheck(5)}")
+                }
+    }
+}
+
 fun mainMammals() {
     val mammalCrew = listOf(
             Sloth("Jerry", false, 15),
             Sloth("Bae", true, 12),
             Sloth("Alex", false, 20),
             Panda("Tegan"),
-            Manatee("Manny")
+            Manatee("Manny"),
+            Tiger("Tigger"),
+            Tiger("Jerome"),
+            Panda("Sandy"),
+            Manatee("SeaCow")
     )
 
     mammalCrew.forEach { it ->
@@ -112,4 +137,15 @@ fun mainMammals() {
         mammalFactCheck(it, Mammal::vertebraeCount)
         mammalFactCheck(it, Mammal::knownSpeciesCount)
     }
+
+    println("mammalCrew.filterIsInstance<Tiger>() = ${mammalCrew.filterIsInstance<Tiger>().joinToString{it.name}}")
+
+    var mc = (mammalCrew as MutableList<Mammal>)
+            .sortedBy { it.name }
+            .associateTo(mutableMapOf<String, Int>(), {it -> Pair(it.name, it.weight) }  )
+    println("mc.map: it.value = ${mc.map{ "${it.key}=${it.value}" }.joinToString() }")
+
+
+
+    printAnimalResultFiltered<Tiger>(mammalCrew, Mammal::knownSpeciesCount)
 }
