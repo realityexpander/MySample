@@ -3,7 +3,6 @@ package mammals
 //from https://medium.com/kotlin-thursdays/introduction-to-kotlin-generics-part-2-9428963bb96b
 
 import kotlin.random.*
-import kotlin.reflect.*
 
 sealed class Mammal(val name: String) {
     open fun eat() {}
@@ -84,7 +83,7 @@ fun Mammal.knownSpeciesCount(i:Int): Int {
         is Manatee -> 3
         is Sloth -> 6
         is Tiger -> 2000
-//        else -> 100
+//        else -> 100 // bc Mammal is a sealed class
     }
 }
 
@@ -105,12 +104,32 @@ fun mammalFactCheck(mammal: Mammal, factCheck: (Mammal, Int)->Int ): Int {
 
 inline fun <reified T: Mammal> printAnimalResultFiltered(
         list: List<Mammal>,
-        factCheck: Mammal.(Int) -> Int  ) {
+        factCheck: Mammal.(Int) -> Int ) {
     if (list.isNotEmpty()) {
         list.filterIsInstance<T>()
                 .forEach {
                     println("${it.javaClass.name} - ${it.factCheck(5)}")
                 }
+    }
+}
+
+interface XY {
+    var a:Int
+    var b:Int
+
+    companion object {
+        var c: Int = 10
+    }
+
+
+}
+class XYImpl(): XY {
+    override var a: Int = 20
+    override var b: Int = 10
+
+
+    companion object {
+        var c: Int = 20
     }
 }
 
@@ -143,9 +162,82 @@ fun mainMammals() {
     var mc = (mammalCrew as MutableList<Mammal>)
             .sortedBy { it.name }
             .associateTo(mutableMapOf<String, Int>(), {it -> Pair(it.name, it.weight) }  )
-    println("mc.map: it.value = ${mc.map{ "${it.key}=${it.value}" }.joinToString() }")
+    println("mc.map: it.value = ${mc.map{ "name:${it.key}=weight:${it.value}" }.joinToString() }")
 
 
 
     printAnimalResultFiltered<Tiger>(mammalCrew, Mammal::knownSpeciesCount)
+
+    // nullable experiments
+    var al:List<Int?>? = listOf(null, 100,300)
+    getX(al)
+
+    var x: Int? = null
+    var xNN = nullableIntToNonNullableInt(x)
+    var y  = nonNullIntToNullableInt(xNN)
+
+    var xy = XYImpl.c
+//    x= null
+//    println(x as Tiger)
+
+
+    // Spread operator
+    foo(strings = *arrayOf("a", "b", "c"))
+    val a = arrayOf("a", "b", "c")
+    val b = arrayOf("z", "x", *a, "o")
+    foo(*b)
+
+
+    PassByReference()
+
+
 }
+
+private fun PassByReference() {
+    class Logger() {
+        var hours: Int = 0
+    }
+
+    class Simulate(val loggerRef: Logger) {
+        fun doSomething() {
+            loggerRef.hours += 1
+        }
+    }
+
+    val log1 = Logger()
+    val log2 = Logger()
+    val sim1 = Simulate(log1)
+    val sim2 = Simulate(log2)
+    sim1.doSomething()
+    sim2.doSomething()
+    sim2.doSomething()
+    println(log1.hours) //This should be 1
+    println(log2.hours) //This should be 2
+}
+
+
+fun foo(vararg strings: String) = println("strings = ${strings.joinToString()}")
+
+
+
+fun nullableIntToNonNullableInt(x: Int?): Int {
+//    var result = x?.let{ x + 1 }
+
+    var result:Int = x ?: 0
+    return result
+}
+
+fun nonNullIntToNullableInt( x: Int): Int? {
+    var result = (x as Int?)
+    return result
+}
+
+fun getX( x: List<Int?>?): Int {
+    var y = -1
+    y = x?.get(0) ?: 0
+
+    return y
+}
+
+
+

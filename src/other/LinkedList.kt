@@ -1,6 +1,6 @@
-class Node<T>(var value:    T,
-              var next:     Node<T>? = null,
-              var previous: Node<T>? = null )
+class Node<T>(var value: T,
+              var next: Node<T>? = null,
+              var previous: Node<T>? = null)
 
 
 enum class NodeInsertionMode { INSERT_BEFORE_NODE, INSERT_AFTER_NODE }
@@ -10,7 +10,7 @@ interface ILinkedList<T> {
     fun removeAll()
 }
 
-open class LinkedList<T>: ILinkedList<T> {
+open class LinkedList<T> : ILinkedList<T> {
 
     private var head: Node<T>? = null
 
@@ -69,7 +69,8 @@ open class LinkedList<T>: ILinkedList<T> {
             lastNode.next = newNode
         } else {
             head = newNode
-        }
+        }// ‍
+
     }
 
     override fun removeAll() {
@@ -87,7 +88,7 @@ open class LinkedList<T>: ILinkedList<T> {
         next?.previous = prev
         node.previous = null
         node.next = null
-        listOf( "a", "b", "c", "d" )
+        listOf("a", "b", "c", "d")
         return node.value
     }
 
@@ -122,22 +123,22 @@ open class LinkedList<T>: ILinkedList<T> {
         return "$s]"
     }
 
-    fun insertNodeBeforeUsingPredicate(value: T, predicate: (Node<T>?) -> Boolean) : T? {
+    fun insertNodeBeforeUsingPredicate(value: T, predicate: (Node<T>?) -> Boolean): T? {
         return insertNodeWithPredicate(value, NodeInsertionMode.INSERT_BEFORE_NODE, predicate)
     }
 
-    fun insertNodeAfterUsingPredicate(value: T, predicate: (Node<T>?) -> Boolean) : T? {
+    fun insertNodeAfterUsingPredicate(value: T, predicate: (Node<T>?) -> Boolean): T? {
         return insertNodeWithPredicate(value, NodeInsertionMode.INSERT_AFTER_NODE, predicate)
     }
 
     private fun insertNodeWithPredicate(value: T,
                                         nodeInsertMode: NodeInsertionMode,
-                                        predicate: (Node<T>?) -> Boolean) : T? {
+                                        predicate: (Node<T>?) -> Boolean): T? {
         var node = head
         var prevNode = head
-        while( node != null) {
-            if( predicate(node) ) {
-                when(nodeInsertMode) {
+        while (node != null) {
+            if (predicate(node)) {
+                when (nodeInsertMode) {
                     NodeInsertionMode.INSERT_BEFORE_NODE -> insertBeforeCurNode(value, node, prevNode)
                     NodeInsertionMode.INSERT_AFTER_NODE -> insertAfterCurNode(value, node)
                 }
@@ -149,10 +150,10 @@ open class LinkedList<T>: ILinkedList<T> {
         return null
     }
 
-    fun contains(match: T) : Boolean {
+    fun contains(match: T): Boolean {
         var node = head
-        while( node != null) {
-            if(node.value == match)
+        while (node != null) {
+            if (node.value == match)
                 return true
             node = node.next
         }
@@ -163,8 +164,8 @@ open class LinkedList<T>: ILinkedList<T> {
         return insertMatch(value, match, NodeInsertionMode.INSERT_BEFORE_NODE)
     }
 
-    fun insertAfterMatch(value: T, match: T) : T? {
-        return insertMatch(value, match, NodeInsertionMode.INSERT_AFTER_NODE )
+    fun insertAfterMatch(value: T, match: T): T? {
+        return insertMatch(value, match, NodeInsertionMode.INSERT_AFTER_NODE)
     }
 
     private fun insertMatch(value: T, match: T, nodeInsertMode: NodeInsertionMode): T? {
@@ -172,7 +173,7 @@ open class LinkedList<T>: ILinkedList<T> {
         var prevNode = head
         while (node != null) {
             if (node.value == match) {
-                when(nodeInsertMode) {
+                when (nodeInsertMode) {
                     NodeInsertionMode.INSERT_BEFORE_NODE ->
                         insertBeforeCurNode(value, node, prevNode)
                     NodeInsertionMode.INSERT_AFTER_NODE ->
