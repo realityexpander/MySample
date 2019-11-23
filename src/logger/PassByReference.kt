@@ -1,4 +1,4 @@
-package mammals.logger
+package logger
 
 private fun PassByReference() {
     class Logger() {

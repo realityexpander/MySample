@@ -188,7 +188,9 @@ fun mainMammals() {
     foo(*b)
 
 
-    PassByReference()
+//    PassByReference()
+
+
 
 
 }

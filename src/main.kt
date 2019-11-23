@@ -1,4 +1,5 @@
 import mammals.mainMammals
+import other.shisheidoTest
 import variance.mainContravariance
 
 public var foo: String = "hello"
@@ -22,7 +23,7 @@ fun main(args: Array<String>) {
 
 //    runSort()
 
-    mainMammals()
+//    mainMammals()
     println()
 
 //    other.mainGenerics()
@@ -33,6 +34,9 @@ fun main(args: Array<String>) {
 
 //    mainContravariance()
 //    println()
+
+    shisheidoTest()
+    println()
 
     println("\n\n")
 
