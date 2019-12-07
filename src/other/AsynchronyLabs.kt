@@ -2,40 +2,50 @@ package other
 
 fun encode(stringToEncode: String): String {
 
-    var chars = stringToEncode.toCharArray()
+    println(stringToEncode)
 
-    // change number order
-    var s: Char
-    var i: Int = 0
-    var curNum: String = ""
-    var collectingNumber = false
+    val chars = stringToEncode.toLowerCase().toCharArray()
+
+    var c: Char
+    var i = 0
+    var collectedNumReversed = ""
+    var collectingNumbers = false
     var res = ""
 
     while( i < chars.size) {
-        s = chars[i]
+        c = chars[i]
 
-        if ( s.isDigit() ) {
-          collectingNumber = true
+        if ( c.isDigit() ) {
+            collectingNumbers = true
+            collectedNumReversed = c + collectedNumReversed
+        } else {
 
-          curNum += s
-        }
-        if (!s.isDigit() && collectingNumber) {
-            res += curNum.reversed()
+            if ( !c.isDigit() ) {
+                if( collectingNumbers ) {
+                    res += collectedNumReversed
+                    collectedNumReversed = ""
+                    collectingNumbers = false
+                }
+            }
 
-            curNum = ""
-            collectingNumber = false
-        } else if (!s.isDigit()){
-            res += s
+            res += when (c) {
+                'a' -> '1'
+                'e' -> '2'
+                'i' -> '3'
+                'o' -> '4'
+                'u' -> '5'
+                'y' -> ' '
+                ' ' -> 'y'
+                in 'a'..'z'-> (c.toInt() - 1).toChar()
+                else -> c
+            }
         }
 
         i++
     }
-
-    // replace vowels with numbers (a->1, e->2, i->3, o->4, u->5)
-    chars = res.toCharArray()
-    i=0
-    while( i < chars.size) {
-
+    // finish the reversed number if still collecting numbers
+    if( collectingNumbers ) {
+        res += collectedNumReversed
     }
 
     return res
@@ -43,5 +53,7 @@ fun encode(stringToEncode: String): String {
 
 
 fun asynchronyLabs() {
-    print( encode("abc1234def7890azx"))
+//    print( encode("Hello World!"))
+//    print( encode("abcde1234fghijklmnopqrstuvwxyz"))
+    print( encode("The one from the village, FN2187"))
 }
