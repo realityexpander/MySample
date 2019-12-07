@@ -20,12 +20,10 @@ fun encode(stringToEncode: String): String {
             collectedNumReversed = c + collectedNumReversed
         } else {
 
-            if ( !c.isDigit() ) {
-                if( collectingNumbers ) {
-                    res += collectedNumReversed
-                    collectedNumReversed = ""
-                    collectingNumbers = false
-                }
+            if ( !c.isDigit() && collectingNumbers ) {
+                res += collectedNumReversed
+                collectedNumReversed = ""
+                collectingNumbers = false
             }
 
             res += when (c) {
