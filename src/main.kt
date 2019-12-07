@@ -1,6 +1,4 @@
-import mammals.mainMammals
-import other.shisheidoTest
-import variance.mainContravariance
+import other.asynchronyLabs
 
 public var foo: String = "hello"
 
@@ -35,7 +33,10 @@ fun main(args: Array<String>) {
 //    mainContravariance()
 //    println()
 
-    shisheidoTest()
+//    shiseidoTest()
+//    println()
+
+    asynchronyLabs()
     println()
 
     println("\n\n")
