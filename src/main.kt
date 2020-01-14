@@ -1,3 +1,4 @@
+import other.HackerRankTest
 import other.asynchronyLabs
 
 public var foo: String = "hello"
@@ -36,7 +37,10 @@ fun main(args: Array<String>) {
 //    shiseidoTest()
 //    println()
 
-    asynchronyLabs()
+//    asynchronyLabs()
+//    println()
+
+    HackerRankTest()
     println()
 
     println("\n\n")
