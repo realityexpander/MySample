@@ -2,14 +2,14 @@ package other
 
 import LinkedList
 
-class LRUCache( var cache_size:Int) {
+class LRUCache<K, T>(var cache_size:Int ) {
 
-    var cache = LinkedList<Int>()
-    var map = mutableMapOf<Int, String>()
+    var cache = LinkedList<K>()
+    var map = mutableMapOf<K, T>()
 
-    fun put(k:Int, v:String) {
-        map[k] = v
-        cache.push(k)
+    fun put(key:K, value:T) {
+        map[key] = value
+        cache.push(key)
 
         if(cache.count() > cache_size ) {
             map.remove(cache.last()?.value)
@@ -17,18 +17,18 @@ class LRUCache( var cache_size:Int) {
         }
     }
 
-    fun get(k:Int):String? {
-        if (cache.contains(k)) {
+    fun get(key:K):T? {
+        if (cache.contains(key)) {
             // move the item to the front
-            cache.remove(k)
-            cache.push(k)
-            return map[k]
+            cache.remove(key)
+            cache.push(key)
+            return map[key]
         }
         // if no cache hit, return null
         return null
     }
 
-    fun cacheItemCount(): Int{
+    fun count(): Int{
         return cache.count()
     }
 
@@ -39,7 +39,7 @@ class LRUCache( var cache_size:Int) {
 }
 
 fun lruCacheTest() {
-    var v = LRUCache(5)
+    var v = LRUCache<Int, String>(7)
     v.put(7, "Chris")
     v.put(8, "Jimbo")
 
@@ -56,8 +56,8 @@ fun lruCacheTest() {
 
 //    println(v.get(6))
 
-    println("cache_count=${v.cacheItemCount()}")
-    if(v.get(2) == null) println("get 1 cache miss") else println("Get 2 cache hit")
+    println("cache_count=${v.count()}")
+    if(v.get(2) == null) println("get 2 cache miss") else println("Get 2 cache hit")
 
     println(v.toString())
 }

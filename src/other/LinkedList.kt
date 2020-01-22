@@ -77,8 +77,6 @@ open class LinkedList<T> : ILinkedList<T> {
         val newNode = Node(value)
         val headNode = head
 
-        println(this.toString())
-
         if (headNode == null) {
             head = newNode
         } else {
