@@ -1,6 +1,8 @@
 package other;
 
-fun HackerRankTest() {
+import java.util.Deque;
+
+fun hackerRankTest() {
 
     // Complete the droppedRequests function below.
     fun droppedRequests(requestTime: Array<Int>): Int {

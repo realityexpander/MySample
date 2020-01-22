@@ -73,6 +73,21 @@ open class LinkedList<T> : ILinkedList<T> {
 
     }
 
+    fun push(value:T) {
+        val newNode = Node(value)
+        val headNode = head
+
+        println(this.toString())
+
+        if (headNode == null) {
+            head = newNode
+        } else {
+            newNode.next = headNode
+            headNode.previous = newNode
+            head = newNode
+        }
+    }
+
     override fun removeAll() {
         head = null
     }
@@ -80,15 +95,16 @@ open class LinkedList<T> : ILinkedList<T> {
     fun removeNode(node: Node<T>): T? {
         val prev = node.previous
         val next = node.next
-        if (prev != null) {
-            prev.next = next
-        } else {
+        if (prev == null) {
             head = next
+        } else {
+            prev.next = next
         }
         next?.previous = prev
+
         node.previous = null
         node.next = null
-        listOf("a", "b", "c", "d")
+
         return node.value
     }
 
@@ -100,6 +116,16 @@ open class LinkedList<T> : ILinkedList<T> {
             null
         }
     }
+
+    fun remove(item: T) {
+        var node = head
+        while (node != null) {
+            if (node.value == item)
+                removeNode(node)
+            node = node.next
+        }
+    }
+
 
     fun removeAtIndex(index: Int): T? {
         val node = nodeAtIndex(index)
@@ -237,4 +263,7 @@ open class LinkedList<T> : ILinkedList<T> {
         curNode?.next = Node(value)
         curNode?.next?.next = tmp
     }
+
+
+
 }
